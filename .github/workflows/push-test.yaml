@@ -21,7 +21,7 @@ jobs:
         run: poetry install
 
       - name: Run lint
-        run: make lint
+        run: make lint-ci
 
       - name: Run tests
         run: make test
