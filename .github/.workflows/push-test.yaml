@@ -1,0 +1,35 @@
+name: Test and publish ADR-Py
+on: push
+
+jobs:
+  test:
+    name: Test
+    runs-one: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10.1
+
+      - name: Install poetry
+        run: python -m pip install poetry
+
+      - name: Configure poetry
+        run: |
+          python -m poetry config virtualenvs.in-project true
+
+      - name: Cache the virtualenv
+        uses: actions/cache@v3
+        with:
+          path: ./.venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        run: python -m poetry install
+
+      - name: Run lint
+        run: make lint
+
+      - name: Run tests
+        run: make test
