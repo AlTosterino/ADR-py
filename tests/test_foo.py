@@ -1,2 +1,2 @@
-def test_foo():
+def test_foo() -> None:
     assert True
