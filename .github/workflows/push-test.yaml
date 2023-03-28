@@ -4,7 +4,7 @@ on: push
 jobs:
   test:
     name: Test
-    runs-one: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Setup Python
