@@ -7,12 +7,14 @@ readme = "README.md"
 packages = [{include = "adrpy", from = "src"}]
 
 [tool.poetry.scripts]
-adrpy = "adrpy.entrypoints.cli:main"
+adrpy = "adrpy.entrypoints.cli:cli_entrypoint"
 
 [tool.poetry.dependencies]
 python = "^3.10"
 typer = "^0.7.0"
 loguru = "^0.6.0"
+rich = "^13.3.3"
+mako = "^1.2.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"
@@ -44,3 +46,4 @@ disallow_untyped_calls = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
+ignore_missing_imports = true
