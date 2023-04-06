@@ -1,11 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
-from adrpy.shared_kernel.enums import AppTemplates
+from adrpy.shared_kernel.constants import AppTemplatePaths
 
 
 @dataclass(frozen=True)
 class InitializeADRDTO:
     path: Path
-    template_type: AppTemplates
-    adr_name: str = "0001-record-architecture-decisions.md"
+    adr_template_path: Path = field(default=AppTemplatePaths.INITIAL_ADR, init=False)

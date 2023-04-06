@@ -1,11 +1,11 @@
 from mako.template import Template as MakoTemplate
 
 from adrpy.services.template.base import BaseTemplateService
-from adrpy.shared_kernel.value_objects.template import FileTemplate, RenderedTemplate
+from adrpy.shared_kernel.value_objects.template import File, RenderedFile
 
 
 class MakoTemplateService(BaseTemplateService):
-    def render(self, template: FileTemplate, data: dict) -> RenderedTemplate:
-        mako_template = MakoTemplate(template.content)
+    def render(self, template_file: File, data: dict) -> RenderedFile:
+        mako_template = MakoTemplate(template_file.content)
         mako_render = mako_template.render(**data)
-        return RenderedTemplate(path=template.path, content=mako_render)
+        return RenderedFile(path=template_file.path, content=mako_render)

@@ -3,11 +3,15 @@ from pathlib import Path
 
 
 @dataclass(frozen=True)
-class FileTemplate:
+class File:
     path: Path
     content: str
 
+    @property
+    def filename(self) -> str:
+        return self.path.name
+
 
 @dataclass(frozen=True)
-class RenderedTemplate(FileTemplate):
+class RenderedFile(File):
     pass
