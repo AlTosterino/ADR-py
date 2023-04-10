@@ -28,9 +28,6 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 # THIRD PARTY
-[tool.isort]
-profile = "black"
-
 [tool.black]
 line_length = 100
 
