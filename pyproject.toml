@@ -48,3 +48,7 @@ ignore_missing_imports = true
 select = ["E", "F", "I", "PL"]
 line-length = 100
 target-version = "py311"
+
+# ADRPY TODO: REMOVE
+[tool.adrpy]
+dir = "docs/adr"
