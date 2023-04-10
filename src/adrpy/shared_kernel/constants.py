@@ -1,9 +1,9 @@
-from enum import Enum
 from pathlib import Path
 from typing import Final
 
-APP_TEMPLATES_DIR: Final[Path] = Path(__file__).parents[2] / "templates"
+APP_TEMPLATES_DIR: Final[Path] = Path(__file__).parents[1] / "templates"
 
 
-class AppTemplatePaths(Enum):
-    INITIAL_ADR = APP_TEMPLATES_DIR / "initial_adr.md"
+class AppTemplatePaths:
+    INITIAL_ADR = APP_TEMPLATES_DIR / "initial-adr.md"
+    SUPERSEDE_ADR = APP_TEMPLATES_DIR / "supersede-adr.md"

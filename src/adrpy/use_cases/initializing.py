@@ -12,10 +12,10 @@ class InitializingADR:
     file_service: Inject[BaseFileService]
 
     def execute(self, dto: InitializeADRDTO) -> None:
-        app_template = self.file_service.get_file(path=dto.adr_template_path)
+        app_template_file = self.file_service.get_file(path=dto.adr_template_path)
         rendered_template = self.template_service.render(
-            file=app_template, data={"date": "TODAY", "status": "ACCEPTED"}
+            template_file=app_template_file, data={"date": "TODAY", "status": "ACCEPTED"}
         )
-        with open(dto.path / dto.adr_name, "w") as file:
-            file.write(rendered_template.content)
-        print("DONE")
+        self.file_service.create_file(
+            path=dto.path, filename=rendered_template.filename, content=rendered_template.content
+        )

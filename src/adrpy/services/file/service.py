@@ -11,6 +11,7 @@ class FileService(BaseFileService):
         return File(path=path, content=content)
 
     def create_file(self, path: Path, filename: str, content: str) -> None:
+        path.mkdir(parents=True, exist_ok=True)
         file_path = path / filename
         with open(file_path, "w") as file:
             file.write(content)
