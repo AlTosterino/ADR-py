@@ -2,11 +2,10 @@ from pathlib import Path
 from typing import Iterator
 
 import pytest
-from injector import Injector
-
 from adrpy.services.file.base import BaseFileService
 from adrpy.services.file.service import FileService
 from adrpy.shared_kernel.value_objects.template import File
+from injector import Injector
 
 TEST_DIRECTORY = Path(__file__).parent / "testdir"
 TEST_FILENAME = "testfile"

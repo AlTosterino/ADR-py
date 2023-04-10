@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import typer
-
 from adrpy.injection import injector
 from adrpy.shared_kernel.dtos import InitializeADRDTO
 from adrpy.use_cases.initializing import InitializingADR

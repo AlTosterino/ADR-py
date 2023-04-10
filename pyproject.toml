@@ -19,11 +19,11 @@ injector = "^0.20.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
-isort = "^5.12.0"
 autoflake = "^2.0.2"
 mypy = "^1.2.0"
 pylint = "^2.17.2"
 pytest = "^7.3.0"
+ruff = "^0.0.261"
 
 [build-system]
 requires = ["poetry-core"]
@@ -48,3 +48,8 @@ disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
 ignore_missing_imports = true
+
+[tool.ruff]
+select = ["E", "F", "I", "PL"]
+line-length = 100
+target-version = "py311"
