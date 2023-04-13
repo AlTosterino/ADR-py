@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate, Template
 
+# TODO: Add example how to use adrpy with custom DatabaseRepository
 
 class BaseADRRepository(ABC):
     @abstractmethod
