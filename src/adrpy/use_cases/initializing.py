@@ -7,6 +7,7 @@ from adrpy.shared_kernel.dtos import InitializeADRDTO
 from adrpy.shared_kernel.settings import Settings
 from loguru import logger
 
+INITIAL_FILENAME = "0001-record-architecture-decisions.md"
 
 @dataclass
 class InitializingADR:
@@ -26,5 +27,7 @@ class InitializingADR:
         else:
             logger.info(f"Initializing ADR in: {save_path}")
         self.file_service.create_file(
-            path=save_path, filename=rendered_template.filename, content=rendered_template.content
+            path=save_path,
+            filename=INITIAL_FILENAME,
+            content=rendered_template.content,
         )

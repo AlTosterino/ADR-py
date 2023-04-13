@@ -8,6 +8,7 @@ class Settings:
 
     @property
     def adr_dir(self) -> Path | None:
+        # TODO: Handle missing dir
         return self.__get_adr_dir_from_pyproject()
 
     def __get_adr_dir_from_pyproject(self) -> Path | None:
