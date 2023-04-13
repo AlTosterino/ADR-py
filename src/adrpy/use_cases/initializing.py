@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from adrpy.injection import Inject
-from adrpy.services.file.base import BaseFileService
+from adrpy.repositories.adr.base import BaseADRRepository
 from adrpy.services.template.base import BaseTemplateService
 from adrpy.shared_kernel.dtos import InitializeADRDTO
 from adrpy.shared_kernel.settings import Settings
@@ -9,14 +9,15 @@ from loguru import logger
 
 INITIAL_FILENAME = "0001-record-architecture-decisions.md"
 
+
 @dataclass
 class InitializingADR:
     template_service: Inject[BaseTemplateService]
-    file_service: Inject[BaseFileService]
+    file_service: Inject[BaseADRRepository]
     settings: Inject[Settings]
 
     def execute(self, dto: InitializeADRDTO) -> None:
-        app_template_file = self.file_service.get_file(path=dto.adr_template_path)
+        app_template_file = self.file_service.get_template(name=dto.adr_template_path)
         rendered_template = self.template_service.render(
             template_file=app_template_file, data={"date": "TODAY", "status": "ACCEPTED"}
         )
