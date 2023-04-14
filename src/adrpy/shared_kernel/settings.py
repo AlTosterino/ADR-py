@@ -6,6 +6,7 @@ from pathlib import Path
 class Settings:
     working_directory: Path = field(default_factory=Path.cwd)
     initial_adr_dir: Path | None = None
+    APP_TEMPLATES_DIR: Path = field(init=False, default=Path(__file__).parents[1] / "templates")
 
     @property
     def adr_dir(self) -> Path | None:

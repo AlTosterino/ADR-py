@@ -5,7 +5,7 @@ import pytest
 from adrpy.repositories.adr.repository import ADRFileRepository, BaseADRRepository
 from adrpy.shared_kernel.constants import AppTemplates
 from adrpy.shared_kernel.settings import Settings
-from adrpy.shared_kernel.value_objects.template import RenderedTemplate, Template
+from adrpy.shared_kernel.value_objects.template import RenderedTemplate
 from injector import Injector
 
 TEST_DIRECTORY = Path(__file__).parent / "testdir"
@@ -32,12 +32,12 @@ def remove_test_file() -> Iterator[None]:
     shutil.rmtree(TEST_DIRECTORY, ignore_errors=True)
 
 
-def test_should_create_file(repo_service, injector) -> None:
+def test_should_create_file(repo_service: BaseADRRepository) -> None:
     # Given
-    rendered_template = RenderedTemplate(name=AppTemplates.INITIAL_ADR, content="TEST_CONTENT")
+    rendered_template = RenderedTemplate(name=TEST_FILENAME, content="TEST_CONTENT")
 
     # When
-    repo_service.create(adr_name=TEST_FILENAME, rendered_template=rendered_template)
+    repo_service.create(adr_name=TEST_FILENAME, template=rendered_template)
 
     # Then
     with open(TEST_DIRECTORY / TEST_FILENAME_WITH_EXTENSION, "r") as created_file:
@@ -46,26 +46,29 @@ def test_should_create_file(repo_service, injector) -> None:
     assert content == rendered_template.content
 
 
-def test_should_get_template_file(repo_service) -> None:
+def test_should_get_template_file(repo_service: BaseADRRepository) -> None:
     # When
     template = repo_service.get_template(name=AppTemplates.INITIAL_ADR)
 
     # Then
-    print(template)
+    assert template.name == AppTemplates.INITIAL_ADR
+    assert template.content
 
 
-def test_should_create_file_in_nested_directories(repo_service) -> None:
+def test_should_create_file_in_nested_directories(injector: Injector) -> None:
     # Given
     nested_dir = TEST_DIRECTORY / "nested1" / "nested2"
-    file_template = Template(path=nested_dir, content="TEST_CONTENT")
+    new_settings = Settings(initial_adr_dir=nested_dir)
+    injector.binder.bind(BaseADRRepository, ADRFileRepository(settings=new_settings))
+    rendered_template = RenderedTemplate(name=TEST_FILENAME, content="TEST_CONTENT")
 
     # When
-    repo_service.create_file(
-        path=file_template.path, filename=TEST_FILENAME, content=file_template.content
+    injector.get(BaseADRRepository).create(
+        adr_name=rendered_template.name, template=rendered_template
     )
 
     # Then
-    with open(file_template.path / TEST_FILENAME, "r") as created_file:
+    with open(nested_dir / TEST_FILENAME_WITH_EXTENSION, "r") as created_file:
         content = created_file.read()
 
-    assert content == file_template.content
+    assert content == rendered_template.content

@@ -7,4 +7,4 @@ class MakoTemplateService(BaseTemplateService):
     def render(self, template_file: Template, data: dict) -> RenderedTemplate:
         mako_template = MakoTemplate(template_file.content)
         mako_render = mako_template.render(**data)
-        return RenderedTemplate(path=template_file.path, content=mako_render)
+        return RenderedTemplate(name=template_file.name, content=mako_render)
