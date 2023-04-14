@@ -19,7 +19,59 @@ Each ADR file is a Markdown document with a unique name that includes a sequenti
 
 ## How to Use
 
-1. For list of commands run `adrpy --help`
+**Usage**:
+
+```console
+$ adrpy [OPTIONS] COMMAND [ARGS]...
+```
+
+**Options**:
+
+* `--install-completion`: Install completion for the current shell.
+* `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
+* `--help`: Show this message and exit.
+
+**Commands**:
+
+* `init`: Initialize ADR directory with first ADR in given PATH
+* `new`: Create new ADR with given NAME
+
+## `init`
+
+Initialize ADR directory with first ADR in given PATH
+
+**Usage**:
+
+```console
+$ adrpy init [OPTIONS] [PATH]
+```
+
+**Arguments**:
+
+* `[PATH]`: Path in where ADRs should reside. If not provided Path will be extracted from pyproject.toml
+
+**Options**:
+
+* `--help`: Show this message and exit.
+
+## `new`
+
+Create new ADR with given NAME
+
+**Usage**:
+
+```console
+$ adrpy new [OPTIONS] NAME
+```
+
+**Arguments**:
+
+* `NAME`: Name of new ADR. Longer names (with spaces) should be put in quotation marks.  [required]
+
+**Options**:
+
+* `adrpy --help`: Show this message and exit.
+
 
 ## **ADR Template**
 
