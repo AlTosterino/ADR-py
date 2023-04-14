@@ -22,4 +22,4 @@ class CreateADRDTO:
         return lower_name_no_spaces
 
     def adr_name_with_ordinal(self, ordinal_number: int) -> str:
-        return f"{ordinal_number:04d}-{self.adr_name}.md"
+        return f"{ordinal_number:04d}-{self.adr_name}"

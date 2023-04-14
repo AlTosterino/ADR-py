@@ -14,5 +14,9 @@ class BaseADRRepository(ABC):
     def create(self, adr_name: str, template: RenderedTemplate) -> None:
         ...
 
+    @abstractmethod
+    def get_next_ordinal_number(self) -> int:
+        ...
+
 
 # ? Possibility of custom templates?

@@ -1,3 +1,5 @@
+import re
+
 from adrpy.injection import Inject
 from adrpy.repositories.adr.base import BaseADRRepository
 from adrpy.shared_kernel.settings import Settings
@@ -21,5 +23,17 @@ class ADRFileRepository(BaseADRRepository):
         ) as file:
             file.write(template.content)
 
-    def __get_filename_with_extension(self, name: str) -> str:
+    def get_next_ordinal_number(self) -> int:
+        ordinal_number = 0
+        for path in self.settings.adr_dir.glob("*.md"):
+            filename = path.stem
+            maybe_number_prefix = re.findall("\d+", filename)
+            if not maybe_number_prefix:
+                continue
+            if (prefix_as_int := int(maybe_number_prefix[0])) > ordinal_number:
+                ordinal_number = prefix_as_int
+        return ordinal_number + 1
+
+    @staticmethod
+    def __get_filename_with_extension(name: str) -> str:
         return f"{name}.md"
