@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 
 from adrpy.injection import Inject
 from adrpy.repositories.adr.base import BaseADRRepository
@@ -17,6 +18,6 @@ class InitializingADR:
     def execute(self, dto: InitializeADRDTO) -> None:
         app_template = self.file_service.get_template(name=dto.adr_template_name)
         rendered_template = self.template_service.render(
-            template_file=app_template, data={"date": "TODAY", "status": "ACCEPTED"}
+            template_file=app_template, data={"date_created": datetime.now(), "status": "ACCEPTED"}
         )
         self.file_service.create(adr_name=self.INITIAL_ADR_NAME, template=rendered_template)

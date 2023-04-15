@@ -1,6 +1,6 @@
 # ${ ordinal_num }. ${ name }
 
-Date: ${ date }
+Date: ${ date_created.strftime("%d/%m/%Y %H:%M") }
 
 <%text>## Status</%text>
 

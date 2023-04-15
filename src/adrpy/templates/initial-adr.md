@@ -1,6 +1,6 @@
 # 1. Record architecture decisions
 
-Date: ${ date }
+Date: ${ date_created.strftime("%d/%m/%Y %H:%M") }
 
 <%text>## Status</%text>
 
