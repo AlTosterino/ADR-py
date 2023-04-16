@@ -16,7 +16,12 @@ class CreatingADR:
         template = self.adr_repository.get_template(name=dto.adr_template_name)
         rendered_template = self.template_service.render(
             template_file=template,
-            data={"date_created": datetime.now(), "status": "ACCEPTED", "name": dto.name, "ordinal_num": 1},
+            data={
+                "date_created": datetime.now(),
+                "status": "ACCEPTED",
+                "name": dto.name,
+                "ordinal_num": 1,
+            },
         )
         ordinal_number = self.adr_repository.get_next_ordinal_number()
         adr_name = dto.adr_name_with_ordinal(ordinal_number=ordinal_number)
