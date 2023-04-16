@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "adrpy"
+name = "adr-py"
 version = "0.1.0"
 description = "This Python script is designed to help software development teams document their architecture decisions using Architecture Decision Records (ADRs)."
 authors = ["Daniel Różycki <altosterino@gmail.com>"]
@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "adrpy", from = "src"}]
 
 [tool.poetry.scripts]
-adrpy = "adrpy.entrypoints.cli:cli_entrypoint"
+adr-py = "adrpy.entrypoints.cli:cli_entrypoint"
 
 [tool.poetry.dependencies]
 python = "^3.11"
