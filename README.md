@@ -15,14 +15,14 @@ Each ADR file is a Markdown document with a unique name that includes a sequenti
 
 ## Installation
 
-- `pip install adrpy`
+- `pip install adr`
 
 ## How to Use
 
 **Usage**:
 
 ```console
-$ adrpy [OPTIONS] COMMAND [ARGS]...
+$ adr [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -43,7 +43,7 @@ Initialize ADR directory with first ADR in given PATH
 **Usage**:
 
 ```console
-$ adrpy init [OPTIONS] [PATH]
+$ adr init [OPTIONS] [PATH]
 ```
 
 **Arguments**:
@@ -61,7 +61,7 @@ Create new ADR with given NAME
 **Usage**:
 
 ```console
-$ adrpy new [OPTIONS] NAME
+$ adr new [OPTIONS] NAME
 ```
 
 **Arguments**:
@@ -70,7 +70,7 @@ $ adrpy new [OPTIONS] NAME
 
 **Options**:
 
-* `adrpy --help`: Show this message and exit.
+* `adr --help`: Show this message and exit.
 
 
 ## **ADR Template**
