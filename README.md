@@ -15,7 +15,7 @@ Each ADR file is a Markdown document with a unique name that includes a sequenti
 
 ## Installation
 
-- **Coming soon**
+- `pip install adrpy`
 
 ## How to Use
 
