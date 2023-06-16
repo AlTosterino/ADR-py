@@ -15,7 +15,7 @@ typer = "^0.7.0"
 loguru = "^0.7.0"
 rich = "^13.3.3"
 mako = "^1.2.4"
-injector = "^0.20.1"
+lidipy = "^0.1.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

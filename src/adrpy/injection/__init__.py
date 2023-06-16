@@ -1,8 +1,10 @@
-from adrpy.injection.modules import RepositoryModules, ServiceModules
-from adrpy.injection.settings import configure_settings
-from injector import Inject as Inject_Injector
-from injector import Injector
+from adrpy.injection.modules import bind_modules
+from adrpy.injection.settings import bind_settings
+from lidipy import Lidi
 
-injector = Injector((configure_settings, RepositoryModules(), ServiceModules()))
+lidi = Lidi()
 
-Inject = Inject_Injector
+
+def setup_injection() -> None:
+    bind_settings(lidi)
+    bind_modules(lidi)

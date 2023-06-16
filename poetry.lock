@@ -88,19 +88,16 @@ files = [
 ]
 
 [[package]]
-name = "injector"
-version = "0.20.1"
-description = "Injector - Python dependency injection framework, inspired by Guice"
+name = "lidipy"
+version = "0.1.1"
+description = "Lidi is a lightweight dependency injector designed to simplify dependency management in your Python projects."
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.11,<4.0"
 files = [
-    {file = "injector-0.20.1-py2.py3-none-any.whl", hash = "sha256:f8fc5994176a8cf6b0455a8d1558c588733474ef17795553464e7e9d2f94eaf5"},
-    {file = "injector-0.20.1.tar.gz", hash = "sha256:8661b49a2f8309ce61e3a6a82b7acb5e225c4bde8e17d1610c893a670dff223a"},
+    {file = "lidipy-0.1.1-py3-none-any.whl", hash = "sha256:f8e7b36d2f4c6b3af8c667c6f7c39b145a0514ce9dc39b38654cc6a2fb945d54"},
+    {file = "lidipy-0.1.1.tar.gz", hash = "sha256:0db04d800d4aa8bb2b245538d4c7020458a2c9ad62eb91f56972f812a19e6437"},
 ]
-
-[package.extras]
-dev = ["black", "check-manifest", "dataclasses", "mypy", "pytest", "pytest-cov (>=2.5.1)"]
 
 [[package]]
 name = "loguru"
@@ -514,4 +511,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "0fcd7520d3b47182e28ee66bef8af351d0bd0a63c9597a5d66dbb29e7eacb907"
+content-hash = "aca29c33a701b7e99807d9c7a29908b7975d87569698ce1f65d2bd8b5d9b2464"

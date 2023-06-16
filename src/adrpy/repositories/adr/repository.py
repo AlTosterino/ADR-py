@@ -1,13 +1,12 @@
 import re
 
-from adrpy.injection import Inject
 from adrpy.repositories.adr.base import BaseADRRepository
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate, Template
 
 
 class ADRFileRepository(BaseADRRepository):
-    def __init__(self, settings: Inject[Settings]) -> None:
+    def __init__(self, settings: Settings) -> None:
         self.settings = settings
 
     def get_template(self, name: str) -> Template:

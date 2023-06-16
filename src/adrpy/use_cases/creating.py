@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from adrpy.injection import Inject
+from adrpy.injection import lidi
 from adrpy.repositories.adr.base import BaseADRRepository
 from adrpy.services.template.base import BaseTemplateService
 from adrpy.shared_kernel.dtos import CreateADRDTO
@@ -9,8 +9,8 @@ from adrpy.shared_kernel.dtos import CreateADRDTO
 
 @dataclass
 class CreatingADR:
-    template_service: Inject[BaseTemplateService]
-    adr_repository: Inject[BaseADRRepository]
+    template_service = lidi.resolve(BaseTemplateService)
+    adr_repository = lidi.resolve(BaseADRRepository)
 
     def execute(self, dto: CreateADRDTO) -> None:
         template = self.adr_repository.get_template(name=dto.adr_template_name)
