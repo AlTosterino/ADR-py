@@ -1,11 +1,11 @@
-from typing import cast
-
 import pytest
-from injector import Injector
+from adrpy.injection import setup_injection
+from lidipy import Lidi
 
 
 @pytest.fixture
-def injector() -> Injector:
-    from adrpy.injection import injector
+def lidi() -> Lidi:
+    from adrpy.injection import lidi
 
-    return cast(Injector, injector)
+    setup_injection()
+    yield lidi

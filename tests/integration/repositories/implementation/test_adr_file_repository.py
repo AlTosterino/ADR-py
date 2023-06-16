@@ -6,7 +6,7 @@ from adrpy.repositories.adr.repository import ADRFileRepository, BaseADRReposito
 from adrpy.shared_kernel.constants import AppTemplates
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate
-from injector import Injector
+from lidipy import Lidi
 
 TEST_DIRECTORY = Path(__file__).parent / "testdir"
 TEST_FILENAME = "testfile"
@@ -14,14 +14,14 @@ TEST_FILENAME_WITH_EXTENSION = "testfile.md"
 
 
 @pytest.fixture()
-def repo_service(injector: Injector) -> Iterator[BaseADRRepository]:
-    original_repo = injector.get(BaseADRRepository)
-    original_settings = injector.get(Settings)
+def repo_service(lidi: Lidi) -> Iterator[BaseADRRepository]:
+    original_repo = lidi.resolve(BaseADRRepository)
+    original_settings = lidi.resolve(Settings)
     new_settings = Settings(initial_adr_dir=TEST_DIRECTORY)
-    injector.binder.bind(BaseADRRepository, to=ADRFileRepository(settings=new_settings))
-    yield injector.get(BaseADRRepository)
-    injector.binder.bind(BaseADRRepository, to=original_repo)
-    injector.binder.bind(Settings, to=original_settings)
+    lidi.bind(BaseADRRepository, ADRFileRepository(settings=new_settings))
+    yield lidi.resolve(BaseADRRepository)
+    lidi.bind(BaseADRRepository, original_repo)
+    lidi.bind(Settings, original_settings)
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -55,15 +55,15 @@ def test_should_get_template_file(repo_service: BaseADRRepository) -> None:
     assert template.content
 
 
-def test_should_create_file_in_nested_directories(injector: Injector) -> None:
+def test_should_create_file_in_nested_directories(lidi: Lidi) -> None:
     # Given
     nested_dir = TEST_DIRECTORY / "nested1" / "nested2"
     new_settings = Settings(initial_adr_dir=nested_dir)
-    injector.binder.bind(BaseADRRepository, ADRFileRepository(settings=new_settings))
+    lidi.bind(BaseADRRepository, ADRFileRepository(settings=new_settings))
     rendered_template = RenderedTemplate(name=TEST_FILENAME, content="TEST_CONTENT")
 
     # When
-    injector.get(BaseADRRepository).create(
+    lidi.resolve(BaseADRRepository).create(
         adr_name=rendered_template.name, template=rendered_template
     )
 

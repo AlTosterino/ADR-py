@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Optional
 
 import typer
-from adrpy.injection import injector
+from adrpy.injection import lidi
 from adrpy.shared_kernel.dtos import CreateADRDTO, InitializeADRDTO
 from adrpy.shared_kernel.settings import Settings
 from adrpy.use_cases.creating import CreatingADR
@@ -26,10 +26,9 @@ def init(
     """
     if path:
         new_settings = Settings(initial_adr_dir=path)
-        injector.binder.bind(Settings, to=new_settings)
-    use_case = injector.get(InitializingADR)
+        lidi.bind(Settings, new_settings, singleton=True)
     dto = InitializeADRDTO(path=path)
-    use_case.execute(dto=dto)
+    InitializingADR().execute(dto=dto)
 
 
 @app.command()
@@ -41,9 +40,8 @@ def new(
     """
     Create new ADR with given NAME
     """
-    use_case = injector.get(CreatingADR)
     dto = CreateADRDTO(name=name)
-    use_case.execute(dto=dto)
+    CreatingADR().execute(dto=dto)
 
 
 def cli_entrypoint() -> None:

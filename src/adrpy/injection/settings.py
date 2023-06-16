@@ -1,6 +1,6 @@
 from adrpy.shared_kernel.settings import Settings
-from injector import Binder, singleton
+from lidipy import Lidi
 
 
-def configure_settings(binder: Binder) -> None:
-    binder.bind(Settings, to=Settings(), scope=singleton)
+def bind_settings(lidi: Lidi) -> None:
+    lidi.bind(Settings, Settings(), singleton=True)
