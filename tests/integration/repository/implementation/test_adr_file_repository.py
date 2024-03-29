@@ -1,35 +1,10 @@
-from pathlib import Path
-from typing import Iterator
-
-import pytest
 from adrpy.repositories.adr.repository import ADRFileRepository, BaseADRRepository
 from adrpy.shared_kernel.constants import AppTemplates
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate
 from lidipy import Lidi
 
-TEST_DIRECTORY = Path(__file__).parent / "testdir"
-TEST_FILENAME = "testfile"
-TEST_FILENAME_WITH_EXTENSION = "testfile.md"
-
-
-@pytest.fixture()
-def repo_service(lidi: Lidi) -> Iterator[BaseADRRepository]:
-    original_repo = lidi.resolve(BaseADRRepository)
-    original_settings = lidi.resolve(Settings)
-    new_settings = Settings(initial_adr_dir=TEST_DIRECTORY)
-    lidi.bind(BaseADRRepository, ADRFileRepository(settings=new_settings))
-    yield lidi.resolve(BaseADRRepository)
-    lidi.bind(BaseADRRepository, original_repo)
-    lidi.bind(Settings, original_settings)
-
-
-@pytest.fixture(scope="module", autouse=True)
-def remove_test_file() -> Iterator[None]:
-    yield
-    import shutil
-
-    shutil.rmtree(TEST_DIRECTORY, ignore_errors=True)
+from tests.fixtures.repository import TEST_DIRECTORY, TEST_FILENAME, TEST_FILENAME_WITH_EXTENSION
 
 
 def test_should_create_file(repo_service: BaseADRRepository) -> None:

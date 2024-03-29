@@ -3,10 +3,10 @@ from typing import Optional
 
 import typer
 from adrpy.injection import lidi
-from adrpy.shared_kernel.dtos import CreateADRDTO, InitializeADRDTO
+from adrpy.shared_kernel.dtos import CreateAdrDto, InitializeAdrDto
 from adrpy.shared_kernel.settings import Settings
-from adrpy.use_cases.creating import CreatingADR
-from adrpy.use_cases.initializing import InitializingADR
+from adrpy.use_cases.create import CreateAdr
+from adrpy.use_cases.initialize import InitializeAdr
 
 app = typer.Typer()
 
@@ -27,8 +27,8 @@ def init(
     if path:
         new_settings = Settings(initial_adr_dir=path)
         lidi.bind(Settings, new_settings, singleton=True)
-    dto = InitializeADRDTO(path=path)
-    InitializingADR().execute(dto=dto)
+    dto = InitializeAdrDto(path=path)
+    InitializeAdr().execute(dto=dto)
 
 
 @app.command()
@@ -40,8 +40,8 @@ def new(
     """
     Create new ADR with given NAME
     """
-    dto = CreateADRDTO(name=name)
-    CreatingADR().execute(dto=dto)
+    dto = CreateAdrDto(name=name)
+    CreateAdr().execute(dto=dto)
 
 
 def cli_entrypoint() -> None:

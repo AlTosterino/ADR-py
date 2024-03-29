@@ -26,7 +26,7 @@ class ADRFileRepository(BaseADRRepository):
         ordinal_number = 0
         for path in self.settings.adr_dir.glob("*.md"):
             filename = path.stem
-            maybe_number_prefix = re.findall("\d+", filename)
+            maybe_number_prefix = re.findall(r"\d+", filename)
             if not maybe_number_prefix:
                 continue
             if (prefix_as_int := int(maybe_number_prefix[0])) > ordinal_number:
