@@ -5,7 +5,7 @@
 This Python script is designed to help software development teams document their architecture decisions using Architecture Decision Records (ADRs). 
 ADRs are a lightweight and effective way to capture important decisions made during the design and development of a software system, and to keep track of their rationale and implications over time.
 
-The script creates ADR files in a predefined format, following the principles of **[Michael Nygard's ADR template](https://github.com/joelparkerhenderson/architecture-decision-record/blob/main/templates/decision-record-template-by-michael-nygard/index.md)**. 
+The script creates ADR files in a predefined format, following the principles of **[Michael Nygard's ADR template](https://github.com/joelparkerhenderson/architecture-decision-record/tree/main/locales/en/templates/decision-record-template-by-michael-nygard)**. 
 Each ADR file is a Markdown document with a unique name that includes a sequential number and a title, which is automatically generated based on the information provided by the user.
 
 ## Prerequisites
