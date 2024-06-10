@@ -22,4 +22,4 @@ lint-ci:
 	poetry run mypy $(LINT_PATHS)
 
 test:
-	poetry run pytest -p no:warnings
+	poetry run pytest -s

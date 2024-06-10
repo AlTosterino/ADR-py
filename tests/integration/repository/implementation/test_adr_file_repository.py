@@ -1,4 +1,6 @@
-from adrpy.repositories.adr.repository import ADRFileRepository, BaseADRRepository
+import dataclasses
+
+from adrpy.repositories.adr.repository import BaseADRRepository
 from adrpy.shared_kernel.constants import AppTemplates
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate
@@ -33,8 +35,8 @@ def test_should_get_template_file(repo_service: BaseADRRepository) -> None:
 def test_should_create_file_in_nested_directories(lidi: Lidi) -> None:
     # Given
     nested_dir = TEST_DIRECTORY / "nested1" / "nested2"
-    new_settings = Settings(initial_adr_dir=nested_dir)
-    lidi.bind(BaseADRRepository, ADRFileRepository(settings=new_settings))
+    new_settings = dataclasses.replace(lidi.resolve(Settings), initial_adr_dir=nested_dir)
+    lidi.bind(Settings, new_settings)
     rendered_template = RenderedTemplate(name=TEST_FILENAME, content="TEST_CONTENT")
 
     # When

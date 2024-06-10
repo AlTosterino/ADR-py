@@ -53,3 +53,8 @@ ignore_missing_imports = true
 select = ["E", "F", "I", "PL"]
 line-length = 100
 target-version = "py311"
+
+[tool.pytest.ini_options]
+addopts = ["--verbose"]
+pythonpath = ["src", "tests"]
+testpaths = ["tests"]

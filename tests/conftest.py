@@ -7,7 +7,7 @@ from lidipy import Lidi
 
 from tests.fixtures.repository import TEST_DIRECTORY
 
-pytest_plugins = ["tests.fixtures"]
+pytest_plugins = ["fixtures.repository"]
 
 
 @pytest.fixture
@@ -19,6 +19,6 @@ def lidi() -> Lidi:
 
 
 @pytest.fixture(autouse=True)
-def remove_test_file() -> Iterator[None]:
+def remove_test_files() -> Iterator[None]:
     yield
     shutil.rmtree(TEST_DIRECTORY, ignore_errors=True)
