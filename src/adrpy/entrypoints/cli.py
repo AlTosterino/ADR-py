@@ -28,7 +28,7 @@ def init(
         new_settings = Settings(initial_adr_dir=path)
         lidi.bind(Settings, new_settings, singleton=True)
     dto = InitializeAdrDto(path=path)
-    InitializeAdr().execute(dto=dto)
+    InitializeAdr.execute(dto=dto)
 
 
 @app.command()
@@ -41,7 +41,7 @@ def new(
     Create new ADR with given NAME
     """
     dto = CreateAdrDto(name=name)
-    CreateAdr().execute(dto=dto)
+    CreateAdr.execute(dto=dto)
 
 
 def cli_entrypoint() -> None:

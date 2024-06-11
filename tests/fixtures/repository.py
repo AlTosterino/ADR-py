@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Iterator
 
 import pytest
-from adrpy.repositories.adr.base import BaseADRRepository
+from adrpy.repositories.adr.base import IADRRepository
 from adrpy.repositories.adr.repository import ADRFileRepository
 from adrpy.shared_kernel.settings import Settings
 from lidipy import Lidi
@@ -14,11 +14,11 @@ TEST_FILENAME_WITH_EXTENSION = "testfile.md"
 
 
 @pytest.fixture()
-def repo_service(lidi: Lidi) -> Iterator[BaseADRRepository]:
-    original_repo = lidi.resolve(BaseADRRepository)
+def adr_repository(lidi: Lidi) -> Iterator[IADRRepository]:
+    original_repo = lidi.resolve(IADRRepository)
     original_settings = lidi.resolve(Settings)
     lidi.bind(Settings, dataclasses.replace(original_settings, initial_adr_dir=TEST_DIRECTORY))
-    lidi.bind(BaseADRRepository, ADRFileRepository)
-    yield lidi.resolve(BaseADRRepository)
-    lidi.bind(BaseADRRepository, original_repo)
+    lidi.bind(IADRRepository, ADRFileRepository)
+    yield lidi.resolve(IADRRepository)
+    lidi.bind(IADRRepository, original_repo)
     lidi.bind(Settings, original_settings)

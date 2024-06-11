@@ -1,23 +1,22 @@
-from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Final
 
 from adrpy.injection import lidi
-from adrpy.repositories.adr.base import BaseADRRepository
-from adrpy.services.template.base import BaseTemplateService
+from adrpy.repositories.adr.base import IADRRepository
+from adrpy.services.template.base import ITemplateService
 from adrpy.shared_kernel.dtos import InitializeAdrDto
-from adrpy.shared_kernel.settings import Settings
 
 
-@dataclass
 class InitializeAdr:
-    template_service = lidi.resolve(BaseTemplateService)
-    file_service = lidi.resolve(BaseADRRepository)
-    settings = lidi.resolve(Settings)
-    INITIAL_ADR_NAME: str = field(init=False, default="0001-record-architecture-decisions")
+    TEMPLATE_SERVICE: Final[ITemplateService] = lidi.resolve_attr(ITemplateService)
+    ADR_REPOSITORY: Final[IADRRepository] = lidi.resolve_attr(IADRRepository)
 
-    def execute(self, dto: InitializeAdrDto) -> None:
-        app_template = self.file_service.get_template(name=dto.adr_template_name)
-        rendered_template = self.template_service.render(
+    INITIAL_ADR_NAME: Final[str] = "0001-record-architecture-decisions"
+
+    @classmethod
+    def execute(cls, dto: InitializeAdrDto) -> None:
+        app_template = cls.ADR_REPOSITORY.get_template(name=dto.adr_template_name)
+        rendered_template = cls.TEMPLATE_SERVICE.render(
             template_file=app_template, data={"date_created": datetime.now(), "status": "ACCEPTED"}
         )
-        self.file_service.create(adr_name=self.INITIAL_ADR_NAME, template=rendered_template)
+        cls.ADR_REPOSITORY.create(adr_name=cls.INITIAL_ADR_NAME, template=rendered_template)
