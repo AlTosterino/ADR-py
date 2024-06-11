@@ -17,8 +17,8 @@ TEST_FILENAME_WITH_EXTENSION = "testfile.md"
 def repo_service(lidi: Lidi) -> Iterator[BaseADRRepository]:
     original_repo = lidi.resolve(BaseADRRepository)
     original_settings = lidi.resolve(Settings)
-    new_settings = dataclasses.replace(original_settings, initial_adr_dir=TEST_DIRECTORY)
-    lidi.bind(BaseADRRepository, ADRFileRepository(settings=new_settings))
+    lidi.bind(Settings, dataclasses.replace(original_settings, initial_adr_dir=TEST_DIRECTORY))
+    lidi.bind(BaseADRRepository, ADRFileRepository)
     yield lidi.resolve(BaseADRRepository)
     lidi.bind(BaseADRRepository, original_repo)
     lidi.bind(Settings, original_settings)
