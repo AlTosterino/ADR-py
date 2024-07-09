@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Iterator
 
 import pytest
-from adrpy.repositories.adr.repository import ADRFileRepository, BaseADRRepository
+from adrpy.repositories.adr.repository import BaseADRRepository
 from adrpy.shared_kernel.constants import AppTemplates
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate
@@ -15,12 +15,9 @@ TEST_FILENAME_WITH_EXTENSION = "testfile.md"
 
 @pytest.fixture()
 def repo_service(lidi: Lidi) -> Iterator[BaseADRRepository]:
-    original_repo = lidi.resolve(BaseADRRepository)
     original_settings = lidi.resolve(Settings)
-    new_settings = Settings(initial_adr_dir=TEST_DIRECTORY)
-    lidi.bind(BaseADRRepository, ADRFileRepository(settings=new_settings))
+    lidi.bind(Settings, Settings(initial_adr_dir=TEST_DIRECTORY))
     yield lidi.resolve(BaseADRRepository)
-    lidi.bind(BaseADRRepository, original_repo)
     lidi.bind(Settings, original_settings)
 
 
@@ -58,8 +55,7 @@ def test_should_get_template_file(repo_service: BaseADRRepository) -> None:
 def test_should_create_file_in_nested_directories(lidi: Lidi) -> None:
     # Given
     nested_dir = TEST_DIRECTORY / "nested1" / "nested2"
-    new_settings = Settings(initial_adr_dir=nested_dir)
-    lidi.bind(BaseADRRepository, ADRFileRepository(settings=new_settings))
+    lidi.bind(Settings, Settings(initial_adr_dir=nested_dir))
     rendered_template = RenderedTemplate(name=TEST_FILENAME, content="TEST_CONTENT")
 
     # When
