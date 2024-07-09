@@ -9,9 +9,8 @@ class Settings:
     initial_adr_dir: Path | None = None  # TODO: Rename to requested_adr_dir or something
     APP_TEMPLATES_DIR: Path = field(init=False, default=Path(__file__).parents[1] / "templates")
 
-    @property
+    @cached_property
     def adr_dir(self) -> Path | None:
-        print("AD", Path.cwd())
         if self.initial_adr_dir:
             return self.initial_adr_dir
         if adr_dir_from_config := self.__get_adr_dir_from_config():
