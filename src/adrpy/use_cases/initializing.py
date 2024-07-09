@@ -5,14 +5,12 @@ from adrpy.injection import lidi
 from adrpy.repositories.adr.base import BaseADRRepository
 from adrpy.services.template.base import BaseTemplateService
 from adrpy.shared_kernel.dtos import InitializeADRDTO
-from adrpy.shared_kernel.settings import Settings
 
 
 @dataclass
 class InitializingADR:
-    template_service = lidi.resolve(BaseTemplateService)
-    file_service = lidi.resolve(BaseADRRepository)
-    settings = lidi.resolve(Settings)
+    template_service = lidi.resolve_attr(BaseTemplateService)
+    file_service = lidi.resolve_attr(BaseADRRepository)
     INITIAL_ADR_NAME: str = field(init=False, default="0001-record-architecture-decisions")
 
     def execute(self, dto: InitializeADRDTO) -> None:

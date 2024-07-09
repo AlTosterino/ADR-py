@@ -1,13 +1,13 @@
 import re
 
+from adrpy.injection import lidi
 from adrpy.repositories.adr.base import BaseADRRepository
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate, Template
 
 
 class ADRFileRepository(BaseADRRepository):
-    def __init__(self, settings: Settings) -> None:
-        self.settings = settings
+    settings = lidi.resolve_attr(Settings)
 
     def get_template(self, name: str) -> Template:
         template_path = self.settings.APP_TEMPLATES_DIR / name

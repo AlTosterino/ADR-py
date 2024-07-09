@@ -5,5 +5,4 @@ from adrpy.shared_kernel.value_objects.template import RenderedTemplate, Templat
 
 class BaseTemplateService(ABC):
     @abstractmethod
-    def render(self, template_file: Template, data: dict) -> RenderedTemplate:
-        ...
+    def render(self, template_file: Template, data: dict) -> RenderedTemplate: ...
