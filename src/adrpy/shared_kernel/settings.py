@@ -1,27 +1,32 @@
 from dataclasses import dataclass, field
+from functools import cached_property
 from pathlib import Path
 
 
 @dataclass(frozen=True)
 class Settings:
     # TODO: Add DEBUG logger handler
-    working_directory: Path = field(default_factory=Path.cwd)
     initial_adr_dir: Path | None = None  # TODO: Rename to requested_adr_dir or something
     APP_TEMPLATES_DIR: Path = field(init=False, default=Path(__file__).parents[1] / "templates")
 
     @property
     def adr_dir(self) -> Path | None:
+        print("AD", Path.cwd())
         if self.initial_adr_dir:
             return self.initial_adr_dir
         if adr_dir_from_config := self.__get_adr_dir_from_config():
             return adr_dir_from_config
         return self.working_directory
 
+    @cached_property
+    def working_directory(self) -> Path:
+        return Path.cwd()
+
     def __get_adr_dir_from_config(self) -> Path | None:
         import tomllib
 
         try:
-            with open("pyproject.toml", "rb") as f:
+            with open(self.working_directory / "pyproject.toml", "rb") as f:
                 data = tomllib.load(f)
         except FileNotFoundError:
             # TODO): Add debug log here

@@ -1,10 +1,12 @@
 from pathlib import Path
 from typing import Generator
+from unittest.mock import patch
 
 import pytest
 from adrpy.shared_kernel.settings import Settings
 
-PYPROJECT_PATH = Path("pyproject.toml")
+DIR_PATH = Path(__file__).parent
+PYPROJECT_PATH = DIR_PATH / Path("pyproject.toml")
 PYPROJECT_DATA = """
     [tool.adrpy]
     dir = "docs/adr"
@@ -49,10 +51,13 @@ def test_should_get_adr_dir_from_settings_when_initial_dir_set() -> None:
 
 def test_should_get_adr_dir_from_pyproject_toml(correct_pyproject_toml: None) -> None:
     # Given
-    settings = Settings()
+    with patch.object(Path, "cwd") as path_cwd_mock:
+        path_cwd_mock.return_value = DIR_PATH
+        settings = Settings()
+        adr_dir = settings.adr_dir
 
     # When & Then
-    assert settings.adr_dir == Path.cwd() / Path("docs/adr")
+    assert adr_dir == DIR_PATH / Path("docs/adr")
 
 
 def test_should_fallback_wrong_adr_dir_from_pyproject_toml_to_working_directory(
@@ -60,7 +65,10 @@ def test_should_fallback_wrong_adr_dir_from_pyproject_toml_to_working_directory(
 ) -> None:
     # TODO: Maybe this shouldn't fallback, but raise instead?
     # Given
-    settings = Settings()
+    with patch.object(Path, "cwd") as path_cwd_mock:
+        path_cwd_mock.return_value = DIR_PATH
+        settings = Settings()
+        adr_dir = settings.adr_dir
 
     # When & Then
-    assert settings.adr_dir == Path.cwd()
+    assert adr_dir == DIR_PATH
