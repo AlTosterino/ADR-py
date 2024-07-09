@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "adr"
-version = "0.2.0"
+version = "0.3.0"
 description = "This Python script is designed to help software development teams document their architecture decisions using Architecture Decision Records (ADRs)."
 authors = ["Daniel Różycki <altosterino@gmail.com>"]
 readme = "README.md"
