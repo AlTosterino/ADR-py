@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Annotated
 
 import typer
 from adrpy.injection import lidi
@@ -13,13 +13,15 @@ app = typer.Typer()
 
 @app.command()
 def init(
-    path: Optional[Path] = typer.Argument(
+    path: Path = typer.Argument(
         None,
         help=(
             "Path in where ADRs should reside. "
-            "If not provided Path will be extracted from pyproject.toml"
+            "If not provided, Path will be extracted from pyproject.toml.  "
+            "If no pyproject.toml is found, ADRs will be initialized in the current "
+            "working directory."
         ),
-    )
+    ),
 ) -> None:
     """
     Initialize ADR directory with first ADR in given PATH
@@ -33,9 +35,12 @@ def init(
 
 @app.command()
 def new(
-    name: str = typer.Argument(
-        ..., help="Name of new ADR. Longer names (with spaces) should be put in quotation marks."
-    ),
+    name: Annotated[
+        str,
+        typer.Argument(
+            help="Name of new ADR. Longer names (with spaces) should be put in quotation marks."
+        ),
+    ]
 ) -> None:
     """
     Create new ADR with given NAME
