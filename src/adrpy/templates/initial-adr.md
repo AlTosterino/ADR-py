@@ -1,3 +1,9 @@
+---
+title: ...
+tags: ...
+
+---
+
 # 1. Record architecture decisions
 
 Date: ${ date_created.strftime("%d/%m/%Y %H:%M") }

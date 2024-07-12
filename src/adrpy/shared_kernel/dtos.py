@@ -5,13 +5,13 @@ from adrpy.shared_kernel.constants import AppTemplates
 
 
 @dataclass(frozen=True)
-class InitializeADRDTO:
+class InitializeAdrDto:
     path: Path | None
     adr_template_name: str = field(default=AppTemplates.INITIAL_ADR, init=False)
 
 
 @dataclass(frozen=True)
-class CreateADRDTO:
+class CreateAdrDto:
     name: str
     adr_template_name: str = field(default=AppTemplates.NEW_ADR, init=False)
 
