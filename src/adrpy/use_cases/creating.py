@@ -9,8 +9,8 @@ from adrpy.shared_kernel.dtos import CreateADRDTO
 
 @dataclass
 class CreatingADR:
-    template_service = lidi.resolve(BaseTemplateService)
-    adr_repository = lidi.resolve(BaseADRRepository)
+    template_service = lidi.resolve_attr(BaseTemplateService)
+    adr_repository = lidi.resolve_attr(BaseADRRepository)
 
     def execute(self, dto: CreateADRDTO) -> None:
         template = self.adr_repository.get_template(name=dto.adr_template_name)
