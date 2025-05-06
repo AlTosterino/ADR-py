@@ -5,6 +5,12 @@ LINT_PATHS = \
 $(SRC_PATH) \
 $(TESTS_PATH)
 
+sync-deps:
+	poetry install
+
+update-deps:
+	poetry update
+
 lint:
 	poetry run black $(LINT_PATHS)
 	poetry run ruff check $(LINT_PATHS) --fix
@@ -16,4 +22,4 @@ lint-ci:
 	poetry run mypy $(LINT_PATHS)
 
 test:
-	poetry run pytest
+	poetry run pytest -s
