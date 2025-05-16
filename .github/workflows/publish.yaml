@@ -2,7 +2,7 @@ name: Publish ADR-Py
 
 on:
   workflow_run:
-    workflows: ["Test ADR-Py"]
+    workflows: [Test ADR-Py]
     types:
       - completed
 #    branches:
