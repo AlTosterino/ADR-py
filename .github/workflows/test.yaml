@@ -9,7 +9,6 @@ permissions:
 
 jobs:
   test:
-    description: Run tests across multiple Python versions with tox
     runs-on: ubuntu-latest
     strategy:
       matrix:
