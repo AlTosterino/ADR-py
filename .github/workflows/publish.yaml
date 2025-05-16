@@ -1,12 +1,10 @@
 name: Publish ADR-Py
 
-on:
-  push:
-#  workflow_run:
-#    workflows: [Test ADR-Py]
-#    types: [completed]
-#    branches:
-#      - main
+workflow_run:
+  workflows: [Test ADR-Py]
+  types: [completed]
+  branches:
+    - main
 
 permissions:
   contents: write
@@ -14,7 +12,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-#    if: startsWith(github.ref, 'refs/tags/')
+    if: ${{ startsWith(github.ref, 'refs/tags/') &&  github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -32,9 +30,9 @@ jobs:
         run: uv build
 
       - name: Publish to PyPI
-        run: uv publish --token ${{ secrets.TEST_PYPI_TOKEN }} --publish-url https://test.pypi.org/legacy/
+        run: uv publish --token ${{ secrets.PYPI_TOKEN }}
 
-#      - name: Create GitHub Release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          files: dist/*
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*
