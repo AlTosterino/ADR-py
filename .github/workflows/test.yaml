@@ -21,9 +21,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
+          activate-environment: true
 
       - name: Install project dependencies
-        run: uv sync --frozen
+        run: make sync-deps
 
       - name: Run lint
         run: make lint-ci

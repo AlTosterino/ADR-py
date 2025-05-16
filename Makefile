@@ -6,20 +6,20 @@ LINT_PATHS = \
 	$(TESTS_PATH)
 
 sync-deps:
-	uv sync --active
+	uv sync --frozen --active
 
 update-deps:
-	uv lock
+	uv lock  --active
 
 lint:
-	black $(LINT_PATHS)
-	ruff check $(LINT_PATHS) --fix
-	mypy $(LINT_PATHS)
+	uv run --active black $(LINT_PATHS)
+	uv run --active ruff check $(LINT_PATHS) --fix
+	uv run --active mypy $(LINT_PATHS)
 
 lint-ci:
-	black --check $(LINT_PATHS)
-	ruff check $(LINT_PATHS)
-	mypy $(LINT_PATHS)
+	uv run --active black --check $(LINT_PATHS)
+	uv run --active ruff check $(LINT_PATHS)
+	uv run --active mypy $(LINT_PATHS)
 
 test:
-	pytest -s
+	uv run --active pytest -s
