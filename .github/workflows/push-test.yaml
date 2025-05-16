@@ -1,62 +1,62 @@
-name: Test and publish ADR-Py
-on: push
+name: Test and Publish ADR-Py
+
+on:
+  push:
+    branches:
+      - main
+      - "refs/tags/*"
+
 permissions:
   contents: write
 
-jobs:
+tasks:
   test:
-    name: Test
+    description: Run tests across multiple Python versions with tox
+    matrix:
+      python-version: ["3.11", "3.12", "3.13"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Install poetry
-        run: pipx install poetry
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Install the latest version of uv and set the python version
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.11'
-          cache: 'poetry'
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
 
-      - name: Install dependencies
-        run: poetry install
+      - name: Install project dependencies
+        run: uv sync --frozen
 
       - name: Run lint
         run: make lint-ci
 
       - name: Run tests
         run: make test
+
   publish:
-    name: Publish
-    needs: test
-    if: startsWith(github.ref, 'refs/tags/')
+    description: Build and publish package on tag
     runs-on: ubuntu-latest
+    needs: test
+    #if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Install poetry
-        run: pipx install poetry
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Install the latest version of uv and set the python version
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.11'
-          cache: 'poetry'
+          python-version: "3.11"
+          enable-cache: true
 
-      - name: Install dependencies
-        run: poetry install
+      - name: Install project dependencies
+        run: uv sync --frozen
 
       - name: Build package
-        run: poetry build
+        run: uv build
 
-      - name: Configure Poetry to publish
-        run: poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+      - name: Publish to PyPI
+        run: uv publish --token ${{ secrets.TEST_PYPI_TOKEN }} --publish-url https://test.pypi.org/legacy/
 
-      - name: Publish
-        run: poetry publish
-
-      - name: Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: dist/*
