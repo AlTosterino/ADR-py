@@ -3,10 +3,11 @@ from pathlib import Path
 from typing import Iterator
 
 import pytest
+from lidipy import Lidi
+
 from adrpy.repositories.adr.base import IADRRepository
 from adrpy.repositories.adr.repository import ADRFileRepository
 from adrpy.shared_kernel.settings import Settings
-from lidipy import Lidi
 
 TEST_DIRECTORY = Path(__file__).parent / "testdir"
 TEST_FILENAME = "testfile"
