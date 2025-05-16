@@ -2,7 +2,6 @@ name: Test ADR-Py
 
 on:
   push:
-  pull_request:
 
 permissions:
   contents: write
