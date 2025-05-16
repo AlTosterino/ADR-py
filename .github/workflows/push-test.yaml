@@ -9,7 +9,7 @@ on:
 permissions:
   contents: write
 
-tasks:
+jobs:
   test:
     description: Run tests across multiple Python versions with tox
     matrix:
