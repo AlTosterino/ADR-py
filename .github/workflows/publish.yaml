@@ -24,9 +24,10 @@ jobs:
         with:
           python-version: "3.11"
           enable-cache: true
+          activate-environment: true
 
       - name: Install project dependencies
-        run: uv sync --frozen
+        run: make sync-deps
 
       - name: Build package
         run: uv build
@@ -34,7 +35,7 @@ jobs:
       - name: Publish to PyPI
         run: uv publish --token ${{ secrets.TEST_PYPI_TOKEN }} --publish-url https://test.pypi.org/legacy/
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: dist/*
+#      - name: Create GitHub Release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: dist/*
