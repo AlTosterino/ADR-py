@@ -9,7 +9,7 @@ sync-deps:
 	uv sync --frozen --active
 
 update-deps:
-	uv lock  --active
+	uv lock
 
 lint:
 	uv run --active black $(LINT_PATHS)
