@@ -3,7 +3,7 @@ name = "adr"
 version = "0.3.0"
 description = "This Python script is designed to help software development teams document their architecture decisions using Architecture Decision Records (ADRs)."
 authors = [{ name = "Daniel Różycki", email = "altosterino@gmail.com" }]
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.11,<=3.13"
 readme = "README.md"
 dependencies = [
     "typer>=0.15.2,<0.16",
