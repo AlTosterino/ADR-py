@@ -3,6 +3,7 @@ from typing import Generator
 from unittest.mock import patch
 
 import pytest
+
 from adrpy.shared_kernel.settings import Settings
 
 DIR_PATH = Path(__file__).parent

@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+
 from adrpy.injection import lidi
 from adrpy.shared_kernel.dtos import CreateAdrDto, InitializeAdrDto
 from adrpy.shared_kernel.settings import Settings
@@ -40,7 +41,7 @@ def new(
         typer.Argument(
             help="Name of new ADR. Longer names (with spaces) should be put in quotation marks."
         ),
-    ]
+    ],
 ) -> None:
     """
     Create new ADR with given NAME

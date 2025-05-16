@@ -2,9 +2,9 @@ import shutil
 from typing import Iterator
 
 import pytest
-from adrpy.injection import setup_injection
 from lidipy import Lidi
 
+from adrpy.injection import setup_injection
 from tests.fixtures.repository import TEST_DIRECTORY
 
 pytest_plugins = ["fixtures.repository"]
