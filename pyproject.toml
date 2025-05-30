@@ -66,4 +66,4 @@ pythonpath = ["src", "tests"]
 testpaths = ["tests"]
 
 [tool.uv]
-required-version = "0.6.8"
+required-version = "0.7.8"
