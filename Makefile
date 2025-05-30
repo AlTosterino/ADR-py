@@ -2,24 +2,24 @@ PROJECT_PATH = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 SRC_PATH = src
 TESTS_PATH = tests
 LINT_PATHS = \
-$(SRC_PATH) \
-$(TESTS_PATH)
+	$(SRC_PATH) \
+	$(TESTS_PATH)
 
 sync-deps:
-	poetry install
+	uv sync --frozen --active
 
 update-deps:
-	poetry update
+	uv lock
 
 lint:
-	poetry run black $(LINT_PATHS)
-	poetry run ruff check $(LINT_PATHS) --fix
-	poetry run mypy $(LINT_PATHS)
+	uv run --active black $(LINT_PATHS)
+	uv run --active ruff check $(LINT_PATHS) --fix
+	uv run --active mypy $(LINT_PATHS)
 
 lint-ci:
-	poetry run black --check $(LINT_PATHS)
-	poetry run ruff check $(LINT_PATHS)
-	poetry run mypy $(LINT_PATHS)
+	uv run --active black --check $(LINT_PATHS)
+	uv run --active ruff check $(LINT_PATHS)
+	uv run --active mypy $(LINT_PATHS)
 
 test:
-	poetry run pytest -s
+	uv run --active pytest -s

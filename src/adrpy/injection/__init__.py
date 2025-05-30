@@ -1,6 +1,7 @@
+from lidipy import Lidi
+
 from adrpy.injection.modules import bind_modules
 from adrpy.injection.settings import bind_settings
-from lidipy import Lidi
 
 lidi = Lidi()
 

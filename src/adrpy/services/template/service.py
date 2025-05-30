@@ -1,6 +1,7 @@
+from mako.template import Template as MakoTemplate
+
 from adrpy.services.template.base import ITemplateService
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate, Template
-from mako.template import Template as MakoTemplate
 
 
 class MakoTemplateService(ITemplateService):

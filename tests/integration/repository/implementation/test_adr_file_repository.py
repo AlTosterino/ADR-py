@@ -1,11 +1,11 @@
 import dataclasses
 
+from lidipy import Lidi
+
 from adrpy.repositories.adr.repository import IADRRepository
 from adrpy.shared_kernel.constants import AppTemplates
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate
-from lidipy import Lidi
-
 from tests.fixtures.repository import TEST_DIRECTORY, TEST_FILENAME, TEST_FILENAME_WITH_EXTENSION
 
 
