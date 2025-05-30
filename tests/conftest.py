@@ -1,17 +1,18 @@
 import shutil
-from typing import Iterator
+from typing import Generator, Iterator
 
 import pytest
 from lidipy import Lidi
 
 from adrpy.injection import setup_injection
+from adrpy.shared_kernel.logging import configure_logging
 from tests.fixtures.repository import TEST_DIRECTORY
 
 pytest_plugins = ["fixtures.repository"]
 
 
 @pytest.fixture
-def lidi() -> Lidi:
+def lidi() -> Generator[Lidi, None, None]:
     from adrpy.injection import lidi
 
     setup_injection()
@@ -22,3 +23,8 @@ def lidi() -> Lidi:
 def remove_test_files() -> Iterator[None]:
     yield
     shutil.rmtree(TEST_DIRECTORY, ignore_errors=True)
+
+
+@pytest.fixture(autouse=True)
+def setup_logging() -> None:
+    configure_logging(debug=True)
