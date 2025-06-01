@@ -6,11 +6,10 @@ authors = [{ name = "Daniel Różycki", email = "altosterino@gmail.com" }]
 requires-python = ">=3.11,<3.14"
 readme = "README.md"
 dependencies = [
-    "typer>=0.15.2,<0.16",
-    "loguru>=0.7.2,<0.8",
-    "rich>=14.0.0,<15",
-    "mako>=1.3.10,<2",
-    "lidipy>=0.3.0,<0.4",
+    "typer==0.16",
+    "loguru==0.7.3",
+    "mako==1.3.10",
+    "lidipy==0.3.1",
 ]
 
 [project.scripts]

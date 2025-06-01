@@ -1,5 +1,5 @@
 import shutil
-from typing import Iterator
+from typing import Generator, Iterator
 
 import pytest
 from lidipy import Lidi
@@ -11,7 +11,7 @@ pytest_plugins = ["fixtures.repository"]
 
 
 @pytest.fixture
-def lidi() -> Lidi:
+def lidi() -> Generator[Lidi, None, None]:
     from adrpy.injection import lidi
 
     setup_injection()
