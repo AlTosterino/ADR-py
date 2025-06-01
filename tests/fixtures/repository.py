@@ -10,8 +10,8 @@ from adrpy.repositories.adr.repository import ADRFileRepository
 from adrpy.shared_kernel.settings import Settings
 
 TEST_DIRECTORY = Path(__file__).parent / "testdir"
-TEST_FILENAME = "testfile"
-TEST_FILENAME_WITH_EXTENSION = "testfile.md"
+TEST_FILENAME = "0001-testfile"
+TEST_FILENAME_WITH_EXTENSION = "0001-testfile.md"
 
 
 @pytest.fixture()
