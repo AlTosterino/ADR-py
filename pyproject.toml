@@ -63,6 +63,7 @@ select = ["E", "F", "I", "PL", "T20"]
 addopts = ["--verbose"]
 pythonpath = ["src", "tests"]
 testpaths = ["tests"]
+filterwarnings = ["error"]
 
 [tool.uv]
 required-version = "0.7.8"

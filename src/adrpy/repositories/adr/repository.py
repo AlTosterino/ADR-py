@@ -1,4 +1,3 @@
-import re
 from typing import Final
 
 from adrpy.injection import lidi
@@ -26,12 +25,13 @@ class ADRFileRepository(IADRRepository):
     def get_next_ordinal_number(self) -> int:
         ordinal_number = 0
         for path in self.SETTINGS.adr_dir.glob("*.md"):
+            # TODO: Use front matter (metadata) to store ordinal number
             filename = path.stem
-            maybe_number_prefix = re.findall(r"\d+", filename)
-            if not maybe_number_prefix:
+            parts = filename.split("-", 1)
+            if not parts or not parts[0].isdigit():
                 continue
-            if (prefix_as_int := int(maybe_number_prefix[0])) > ordinal_number:
-                ordinal_number = prefix_as_int
+            prefix_as_int = int(parts[0])
+            ordinal_number = max(ordinal_number, prefix_as_int)
         return ordinal_number + 1
 
     @staticmethod
