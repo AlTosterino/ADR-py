@@ -1,6 +1,6 @@
 [project]
 name = "adr"
-version = "0.4.0"
+version = "0.4.1"
 description = "This Python script is designed to help software development teams document their architecture decisions using Architecture Decision Records (ADRs)."
 authors = [{ name = "Daniel Różycki", email = "altosterino@gmail.com" }]
 requires-python = ">=3.11,<3.14"
