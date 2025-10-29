@@ -1,3 +1,9 @@
+---
+title: ...
+tags: ...
+
+---
+
 # ${ ordinal_num }. ${ name }
 
 Date: ${ date_created.strftime("%d/%m/%Y %H:%M") }
