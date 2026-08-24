@@ -58,6 +58,8 @@ templates: packaged ADR templates
 - Prefer `Path` over string paths, frozen dataclasses for DTOs/value objects, explicit return types, and small single-purpose methods.
 - Follow Ruff's configured rules: `E`, `F`, `I`, `PL`, and `T20`. Keep imports sorted and do not leave debug `print` calls in production code.
 - Match the existing naming: classes in PascalCase, functions/methods and modules in `snake_case`, constants in `UPPER_SNAKE_CASE`.
+- Organize every source file from global concepts to implementation detail so the most important behavior is visible first. Put the module docstring and imports first, then constants/types, public classes, public module functions/CLI commands, and private helpers at the bottom. Within classes, put the constructor and public methods before private methods. Do not make readers scan past private helpers to discover the application's commands or primary API.
+- For entrypoint modules specifically, keep the Typer app and public commands prominent; place validation adapters and other command helpers after the commands they support. For service/repository modules, expose the interface or main public operation before private parsing, formatting, and filesystem helpers.
 - Use comments/docstrings for intent and non-obvious constraints. Treat existing TODOs as known design debt, not as permission to widen a change unnecessarily.
 - Preserve cross-platform behavior. CI runs on Ubuntu and Windows, so use `pathlib`, avoid OS-specific separators, and test CLI/path changes on both platforms when practical.
 - Do not edit `uv.lock` manually. Change dependency declarations in `pyproject.toml` and regenerate the lockfile with `uv lock`.
