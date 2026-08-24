@@ -7,12 +7,14 @@ from adrpy.shared_kernel.constants import AppTemplates
 @dataclass(frozen=True)
 class InitializeAdrDto:
     path: Path | None
+    config_path: Path | None = None
     adr_template_name: str = field(default=AppTemplates.INITIAL_ADR, init=False)
 
 
 @dataclass(frozen=True)
 class CreateAdrDto:
     name: str
+    config_path: Path | None = None
     adr_template_name: str = field(default=AppTemplates.NEW_ADR, init=False)
 
     @property

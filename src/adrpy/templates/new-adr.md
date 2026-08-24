@@ -1,12 +1,8 @@
----
-title: ...
-tags: ...
-
----
+${ front_matter }
 
 # ${ ordinal_num }. ${ name }
 
-Date: ${ date_created.strftime("%d/%m/%Y %H:%M") }
+Date: ${ date_created.strftime("%Y-%m-%d") }
 
 <%text>## Status</%text>
 

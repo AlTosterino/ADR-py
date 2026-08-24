@@ -36,6 +36,33 @@ $ adr [OPTIONS] COMMAND [ARGS]...
 * `init`: Initialize ADR directory with first ADR in given PATH
 * `new`: Create new ADR with given NAME
 
+## Configuration and metadata
+
+ADR-py works in ordinary documentation repositories. If no path is supplied and no configuration is found, ADRs are created in the current working directory.
+
+The configuration search order is:
+
+1. An explicit path passed to `adr init`.
+2. An explicit TOML file passed with `--config`.
+3. `.adrpy.toml` in the current working directory.
+4. `[tool.adrpy]` in the current working directory's `pyproject.toml`.
+5. The current working directory.
+
+For a non-Python documentation repository, create `.adrpy.toml`:
+
+```toml
+dir = "docs/adr"
+```
+
+The same file can be supplied to both commands:
+
+```console
+$ adr init --config .adrpy.toml
+$ adr new --config .adrpy.toml "Use PostgreSQL"
+```
+
+Generated ADRs start with YAML front matter containing an immutable UUID `id`, a numeric `ordinal`, `title`, `status`, ISO `date`, a list of `tags`, and UUID relationship fields `supersedes` and `superseded_by`. The front matter is intentionally machine-readable while the Markdown body remains editable in any text editor.
+
 ## `init`
 
 Initialize ADR directory with first ADR in given PATH

@@ -31,6 +31,7 @@ templates: packaged ADR templates
 - `src/adrpy/repositories/`: persistence ports and adapters. `IADRRepository` is the seam for replacing the filesystem implementation with another backend.
 - `src/adrpy/services/`: application services, currently template rendering behind `ITemplateService` and `MakoTemplateService`.
 - `src/adrpy/shared_kernel/`: cross-cutting types and configuration. DTOs and value objects are frozen dataclasses; preserve that immutability unless there is a strong reason not to.
+- `src/adrpy/services/metadata/`: YAML front matter serialization/parsing and metadata validation.
 - `src/adrpy/injection/`: the composition root. Register implementations here and resolve dependencies through `lidi`; do not construct infrastructure inside use cases.
 - `src/adrpy/templates/`: packaged Mako Markdown templates. Template names are centralized in `AppTemplates`.
 - `tests/unit/`: isolated behavior tests, currently focused on settings resolution.
@@ -42,6 +43,8 @@ templates: packaged ADR templates
 - Use interfaces/abstract base classes when adding a replaceable infrastructure concern. Bind the concrete implementation in `injection/modules.py`.
 - Keep filesystem access in repository adapters. Keep rendering in template services. Keep orchestration and business decisions in use cases.
 - Configuration is supplied through the frozen `Settings` object. ADR directory resolution currently prefers an explicit command path, then `[tool.adrpy].dir` in the working directory's `pyproject.toml`, then the working directory.
+- Configuration also supports an explicit TOML path and `.adrpy.toml` for non-Python documentation repositories. Relative configured directories resolve from the configuration file's directory.
+- Generated ADR metadata is YAML front matter with immutable UUID `id`, positive integer `ordinal`, `title`, one of `proposed|accepted|rejected|deprecated|superseded`, ISO `date`, list `tags`, and UUID relationship fields `supersedes`/`superseded_by`. Use `python-frontmatter` for Markdown front matter parsing/rendering; keep ADR-specific validation in `AdrMetadata` and do not implement a partial parser.
 - Be careful with import-time dependency resolution: use cases and `ADRFileRepository` currently resolve dependencies as class attributes. Changes to the composition root must be tested for import-order and test-isolation effects.
 - ADR filenames use a four-digit ordinal followed by a lowercase, whitespace-to-hyphen title, for example `0002-use-postgresql.md`.
 - Ordinal discovery currently scans Markdown filenames and ignores files whose first hyphen-delimited component is not numeric. Any change to numbering or supersession should consider the open metadata/listing issues.
