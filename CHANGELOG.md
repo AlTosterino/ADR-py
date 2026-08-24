@@ -9,6 +9,7 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- `--status` and repeatable `--tag` options for `adr init` and `adr new`.
 - Validated YAML front matter for generated ADRs.
 - Immutable UUID identifiers, numeric ordinals, ISO dates, statuses, tag lists, and supersession reference fields.
 - `--config` support for `adr init` and `adr new`.

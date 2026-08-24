@@ -58,10 +58,11 @@ The same file can be supplied to both commands:
 
 ```console
 $ adr init --config .adrpy.toml
-$ adr new --config .adrpy.toml "Use PostgreSQL"
+$ adr init --config .adrpy.toml --status proposed --tag architecture --tag process
+$ adr new --config .adrpy.toml "Use PostgreSQL" --status proposed --tag database --tag persistence
 ```
 
-Generated ADRs start with YAML front matter containing an immutable UUID `id`, a numeric `ordinal`, `title`, `status`, ISO `date`, a list of `tags`, and UUID relationship fields `supersedes` and `superseded_by`. The front matter is intentionally machine-readable while the Markdown body remains editable in any text editor.
+Generated ADRs start with YAML front matter containing an immutable UUID `id`, a numeric `ordinal`, `title`, `status`, ISO `date`, a list of `tags`, and UUID relationship fields `supersedes` and `superseded_by`. New ADRs default to `proposed`; pass `--status` to select another allowed status and repeat `--tag` for multiple tags. The front matter is intentionally machine-readable while the Markdown body remains editable in any text editor.
 
 ## `init`
 
@@ -81,6 +82,10 @@ $ adr init [OPTIONS] [PATH]
 
 * `--help`: Show this message and exit.
 
+* `--status`: Initial status; defaults to `proposed`.
+
+* `--tag`: Tag to add; repeat for multiple tags.
+
 ## `new`
 
 Create new ADR with given NAME
@@ -98,6 +103,10 @@ $ adr new [OPTIONS] NAME
 **Options**:
 
 * `adr --help`: Show this message and exit.
+
+* `--status`: Initial status; defaults to `proposed`.
+
+* `--tag`: Tag to add; repeat for multiple tags.
 
 
 ## **ADR Template**
