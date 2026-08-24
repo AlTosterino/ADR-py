@@ -127,6 +127,21 @@ Examples: `feature/list-adrs`, `bug/windows-help`, `chore/update-uv`. Branch nam
 
 All Git commit messages must use a Gitmoji prefix, including commits created by agents. Use a Gitmoji followed by a concise imperative summary, for example `:sparkles: add ADR listing command`, `:bug: handle missing ADR directory`, or `:memo: update agent guidance`.
 
+## Contributing
+
+ADR-py is a public open-source project. Contributions from maintainers, users, and automation are welcome, but every contribution must be reviewable, reproducible, and safe for existing users.
+
+- Check existing issues, pull requests, and the roadmap before starting work. For substantial changes, link an existing issue or open one first.
+- Create focused branches from the current `main` using `feature/xyz`, `bug/xyz`, `chore/xyz`, or `docs/xyz` where appropriate. Never develop directly on `main`.
+- Keep commits small and use Gitmoji-prefixed imperative messages. Do not mix unrelated refactors, generated artifacts, dependency changes, and feature work in one contribution.
+- For dependency changes, explain why the dependency/version is needed, update `uv.lock` through uv, run the security/dependency checks available to the contributor, and disclose tools that could not analyze the project.
+- Every pull request must include a concise summary, user-visible behavior, testing performed, compatibility or migration impact, and known limitations. The merged [PR #21](https://github.com/AlTosterino/ADR-py/pull/21) is the model for a focused dependency PR: rationale, lockfile update, test plan, and transparent security-scan notes.
+- User-facing changes must update `README.md`, `CHANGELOG.md`, roadmap documentation, or migration notes as applicable. Follow Keep a Changelog 1.1.0; do not use commit history as the changelog.
+- Before requesting review, run the full lint/test suite and the rigorous CLI E2E verification required above. Include the commands and results in the pull request.
+- Do not commit generated ADR fixtures, temporary directories, virtual environments, build outputs, secrets, or local editor state.
+- Contributors must respond to review findings with code, tests, or an explicit explanation. Do not bypass CI or force-push over another contributor's work without coordination.
+- Security vulnerabilities and credentials must not be posted in public issues or pull requests; use the repository's private reporting channel if one is configured.
+
 ## Release and packaging notes
 
 ADR-py is a public open-source project. Treat every release, dependency change, metadata change, and generated-file change as user-facing and potentially irreversible. Do not treat this as a private or disposable project: preserve backwards compatibility, document migration impact, and require evidence before publishing.
@@ -157,7 +172,7 @@ PR #24 is intended for a public PyPI release as `0.5.0`, but only after all of t
 
 ### Required release workflow
 
-The GitHub Actions workflow in `.github/workflows/ci.yml` is authoritative. A `v*` tag runs the test matrix first; the `publish` job then builds the package, publishes it to PyPI using `PYPI_TOKEN`, and creates the GitHub Release with the built artifacts.
+The GitHub Actions workflow in `.github/workflows/ci.yaml` is authoritative. A `v*` tag runs the test matrix first; the `publish` job then builds the package, publishes it to PyPI using `PYPI_TOKEN`, and creates the GitHub Release with the built artifacts.
 
 1. Merge the release-ready pull request into `main`.
 2. Create a focused release-preparation branch from the merged `main`, for example `chore/release-0.5.0`.
