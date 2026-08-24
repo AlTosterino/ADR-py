@@ -49,7 +49,7 @@ templates: packaged ADR templates
 
 ## Coding and style conventions
 
-- Target Python 3.11; supported range is `>=3.11,<3.14`.
+- Target Python 3.11; supported range is `>=3.11,<3.15`.
 - Use 4 spaces, a maximum line length of 100, and Black formatting.
 - Use type annotations on all functions and methods. Mypy is configured to reject untyped definitions and calls and to warn on unreachable code, missing returns, redundant casts, and unsafe `Any` returns.
 - Prefer `Path` over string paths, frozen dataclasses for DTOs/value objects, explicit return types, and small single-purpose methods.
@@ -80,7 +80,7 @@ uv run --active ruff check src tests
 uv run --active mypy src tests
 ```
 
-The lockfile and `pyproject.toml` require `uv==0.7.8`; use that version before running the commands if the installed `uv` version differs. CI runs the frozen dependency sync, `make lint-ci`, and `make test` on Python 3.11, 3.12, and 3.13 across Ubuntu and Windows. Pytest treats warnings as errors, so new warnings are test failures.
+The lockfile and `pyproject.toml` require `uv==0.7.8`; use that version before running the commands if the installed `uv` version differs. CI runs the frozen dependency sync, `make lint-ci`, and `make test` on Python 3.11, 3.12, 3.13, and 3.14 across Ubuntu and Windows. Python prereleases such as 3.15 should be tested in a separate explicitly non-stable job before being added to the supported matrix. Pytest treats warnings as errors, so new warnings are test failures.
 
 When changing behavior:
 
