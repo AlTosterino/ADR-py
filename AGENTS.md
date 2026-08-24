@@ -157,6 +157,7 @@ ADR-py is a public open-source project. Treat every release, dependency change, 
 - Record breaking changes, deprecations, removals, migration steps, security fixes, and behavior changes explicitly.
 - Move entries from `Unreleased` into the versioned section during release preparation, then add comparison links at the bottom of the file.
 - Keep the changelog consistent with the actual wheel, CLI behavior, documentation, and GitHub release notes.
+- Every GitHub Release must have non-empty, human-written release notes. Prepare and review them before tagging; they must summarize the release, link or correspond to the versioned `CHANGELOG.md` section, and call out breaking changes, migrations, security fixes, dependency changes, and notable contributors where applicable.
 
 ### Release decision for the P0 metadata/configuration work
 
@@ -181,6 +182,6 @@ The GitHub Actions workflow in `.github/workflows/ci.yaml` is authoritative. A `
 5. Open and merge the release-preparation PR. Confirm the exact commit to release is on `main` and CI is green.
 6. Create an annotated tag on that exact `main` commit: `git tag -a v0.5.0 -m ':bookmark: release v0.5.0'`.
 7. Push the tag: `git push origin v0.5.0`. Do not use `uv publish` manually when the tag workflow is the configured release path.
-8. Verify the tag workflow, PyPI package, GitHub Release, attached wheel/sdist, and installed-package smoke test. If publication fails, stop and diagnose the workflow; never create a replacement version or overwrite release history casually.
+8. Verify the tag workflow, PyPI package, GitHub Release, attached wheel/sdist, installed-package smoke test, and non-empty release notes. If the workflow creates a GitHub Release without notes, update it immediately with the reviewed notes before considering the release complete. If publication fails, stop and diagnose the workflow; never create a replacement version or overwrite release history casually.
 
 Do not create a release merely because code is merged. Do not publish feature-branch artifacts, dirty working trees, unreviewed changelogs, or packages that have not passed the clean-wheel smoke test. Do not change package layout, entrypoint configuration, version support, or the publish workflow without checking both the wheel build and GitHub Actions behavior.
