@@ -138,7 +138,7 @@ ADR-py is a public open-source project. Treat every release, dependency change, 
 
 ### Release decision for the P0 metadata/configuration work
 
-PR #24 is intended for a public PyPI release as `0.5.0`, but only after all of these gates pass:
+PR #24 is intended for a public PyPI release as `0.5.0`, but only after the maintainer pre-tag checklist below is complete. These are project safety requirements, not hidden GitHub Actions approvals. The current repository version remains `0.4.1`; a `v0.5.0` tag must never be created until `pyproject.toml` and the lockfile describe `0.5.0` on `main`.
 
 - PR #24 is merged into `main`; never publish or tag from `feature/p0-metadata-foundation` or another feature branch.
 - Configuration and metadata migration documentation is reviewed and describes UUIDs, ordinals, statuses, tags, front matter, config precedence, and compatibility with existing ADR files.
@@ -150,7 +150,7 @@ PR #24 is intended for a public PyPI release as `0.5.0`, but only after all of t
 
 ### Required release workflow
 
-The GitHub Actions workflow in `.github/workflows/ci.yml` is authoritative. A `v*` tag runs the test matrix first; the `publish` job then builds the package, publishes it to PyPI using `PYPI_TOKEN`, and creates the GitHub Release with the built artifacts.
+The GitHub Actions workflow in `.github/workflows/ci.yaml` is authoritative. It has no manual approval or protected-environment gate in the workflow itself. A `v*` tag triggers the test matrix; the `publish` job runs only when that matrix succeeds, builds the version declared in `pyproject.toml`, publishes it to PyPI using `PYPI_TOKEN`, and creates the GitHub Release with the built artifacts. The tag name does not set or override the package version.
 
 1. Merge the release-ready pull request into `main`.
 2. Create a focused release-preparation branch from the merged `main`, for example `chore/release-0.5.0`.
