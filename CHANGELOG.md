@@ -17,7 +17,7 @@ All notable changes to ADR-py are documented here.
 
 - `adr init` and `adr new` now emit the same metadata schema.
 - Relative configured ADR directories resolve relative to their configuration file.
-- The YAML implementation uses PyYAML rather than a partial hand-written parser.
+- Front matter parsing/rendering uses the established `python-frontmatter` package rather than a hand-written delimiter parser; ADR-specific validation remains in the typed metadata model.
 - The project toolchain is pinned to `uv==0.12.5` so CI resolves stable Python 3.14 instead of the obsolete 3.14 alpha selected by uv 0.7.8.
 
 ### Metadata contract
