@@ -7,18 +7,11 @@ from adrpy.injection import lidi
 from adrpy.shared_kernel.dtos import CreateAdrDto, InitializeAdrDto
 from adrpy.shared_kernel.errors import MetadataValidationError
 from adrpy.shared_kernel.settings import Settings
-from adrpy.shared_kernel.value_objects.adr import normalize_tags, validate_status
+from adrpy.shared_kernel.value_objects.adr import AdrCreationMetadata
 from adrpy.use_cases.create import CreateAdr
 from adrpy.use_cases.initialize import InitializeAdr
 
 app = typer.Typer()
-
-
-def _creation_metadata(status: str, tags: list[str] | None) -> tuple[str, tuple[str, ...]]:
-    try:
-        return validate_status(status), normalize_tags(tags or ())
-    except MetadataValidationError as error:
-        raise typer.BadParameter(str(error)) from error
 
 
 @app.command()
@@ -54,12 +47,12 @@ def init(
     elif config:
         new_settings = Settings(config_path=config)
         lidi.bind(Settings, new_settings, singleton=True)
-    validated_status, validated_tags = _creation_metadata(status, tags)
+    creation_metadata = _creation_metadata(status, tags)
     dto = InitializeAdrDto(
         path=path,
         config_path=config,
-        status=validated_status,
-        tags=validated_tags,
+        status=creation_metadata.status,
+        tags=creation_metadata.tags,
     )
     InitializeAdr.execute(dto=dto)
 
@@ -90,15 +83,22 @@ def new(
     """
     if config:
         lidi.bind(Settings, Settings(config_path=config), singleton=True)
-    validated_status, validated_tags = _creation_metadata(status, tags)
+    creation_metadata = _creation_metadata(status, tags)
     dto = CreateAdrDto(
         name=name,
         config_path=config,
-        status=validated_status,
-        tags=validated_tags,
+        status=creation_metadata.status,
+        tags=creation_metadata.tags,
     )
     CreateAdr.execute(dto=dto)
 
 
 def cli_entrypoint() -> None:
     app()
+
+
+def _creation_metadata(status: str, tags: list[str] | None) -> AdrCreationMetadata:
+    try:
+        return AdrCreationMetadata(status=status, tags=tuple(tags or ()))
+    except MetadataValidationError as error:
+        raise typer.BadParameter(str(error)) from error

@@ -25,6 +25,16 @@ def normalize_tags(values: Iterable[str]) -> tuple[str, ...]:
 
 
 @dataclass(frozen=True)
+class AdrCreationMetadata:
+    status: str = "proposed"
+    tags: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        validate_status(self.status)
+        object.__setattr__(self, "tags", normalize_tags(self.tags))
+
+
+@dataclass(frozen=True)
 class AdrMetadata:
     id: str
     ordinal: int

@@ -56,6 +56,8 @@ templates: packaged ADR templates
 - Use 4 spaces, a maximum line length of 100, and Black formatting.
 - Use type annotations on all functions and methods. Mypy is configured to reject untyped definitions and calls and to warn on unreachable code, missing returns, redundant casts, and unsafe `Any` returns.
 - Prefer `Path` over string paths, frozen dataclasses for DTOs/value objects, explicit return types, and small single-purpose methods.
+- Use named custom types for structured data crossing a public boundary. Do not return opaque nested tuples or unstructured mappings such as `tuple[str, tuple[str, ...]]`; define a named frozen dataclass, value object, or DTO with meaningful fields instead.
+- Specify behavior before implementation: document defaults, accepted inputs, validation rules, errors, side effects, compatibility expectations, and user-visible output. Implement both the successful and failure paths and add tests for each; do not leave behavior implicit in incidental library or template behavior.
 - Follow Ruff's configured rules: `E`, `F`, `I`, `PL`, and `T20`. Keep imports sorted and do not leave debug `print` calls in production code.
 - Match the existing naming: classes in PascalCase, functions/methods and modules in `snake_case`, constants in `UPPER_SNAKE_CASE`.
 - Organize every source file from global concepts to implementation detail so the most important behavior is visible first. Put the module docstring and imports first, then constants/types, public classes, public module functions/CLI commands, and private helpers at the bottom. Within classes, put the constructor and public methods before private methods. Do not make readers scan past private helpers to discover the application's commands or primary API.
