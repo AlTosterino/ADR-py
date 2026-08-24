@@ -23,14 +23,21 @@ def init(
             "working directory."
         ),
     ),
+    config: Annotated[
+        Path | None,
+        typer.Option("--config", help="TOML configuration file used to resolve the ADR directory."),
+    ] = None,
 ) -> None:
     """
     Initialize ADR directory with first ADR in given PATH
     """
     if path:
-        new_settings = Settings(initial_adr_dir=path)
+        new_settings = Settings(initial_adr_dir=path, config_path=config)
         lidi.bind(Settings, new_settings, singleton=True)
-    dto = InitializeAdrDto(path=path)
+    elif config:
+        new_settings = Settings(config_path=config)
+        lidi.bind(Settings, new_settings, singleton=True)
+    dto = InitializeAdrDto(path=path, config_path=config)
     InitializeAdr.execute(dto=dto)
 
 
@@ -42,11 +49,17 @@ def new(
             help="Name of new ADR. Longer names (with spaces) should be put in quotation marks."
         ),
     ],
+    config: Annotated[
+        Path | None,
+        typer.Option("--config", help="TOML configuration file used to resolve the ADR directory."),
+    ] = None,
 ) -> None:
     """
     Create new ADR with given NAME
     """
-    dto = CreateAdrDto(name=name)
+    if config:
+        lidi.bind(Settings, Settings(config_path=config), singleton=True)
+    dto = CreateAdrDto(name=name, config_path=config)
     CreateAdr.execute(dto=dto)
 
 

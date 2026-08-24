@@ -31,6 +31,7 @@ templates: packaged ADR templates
 - `src/adrpy/repositories/`: persistence ports and adapters. `IADRRepository` is the seam for replacing the filesystem implementation with another backend.
 - `src/adrpy/services/`: application services, currently template rendering behind `ITemplateService` and `MakoTemplateService`.
 - `src/adrpy/shared_kernel/`: cross-cutting types and configuration. DTOs and value objects are frozen dataclasses; preserve that immutability unless there is a strong reason not to.
+- `src/adrpy/services/metadata/`: YAML front matter serialization/parsing and metadata validation.
 - `src/adrpy/injection/`: the composition root. Register implementations here and resolve dependencies through `lidi`; do not construct infrastructure inside use cases.
 - `src/adrpy/templates/`: packaged Mako Markdown templates. Template names are centralized in `AppTemplates`.
 - `tests/unit/`: isolated behavior tests, currently focused on settings resolution.
@@ -42,6 +43,8 @@ templates: packaged ADR templates
 - Use interfaces/abstract base classes when adding a replaceable infrastructure concern. Bind the concrete implementation in `injection/modules.py`.
 - Keep filesystem access in repository adapters. Keep rendering in template services. Keep orchestration and business decisions in use cases.
 - Configuration is supplied through the frozen `Settings` object. ADR directory resolution currently prefers an explicit command path, then `[tool.adrpy].dir` in the working directory's `pyproject.toml`, then the working directory.
+- Configuration also supports an explicit TOML path and `.adrpy.toml` for non-Python documentation repositories. Relative configured directories resolve from the configuration file's directory.
+- Generated ADR metadata is YAML front matter with immutable UUID `id`, positive integer `ordinal`, `title`, one of `proposed|accepted|rejected|deprecated|superseded`, ISO `date`, list `tags`, and UUID relationship fields `supersedes`/`superseded_by`. Use PyYAML's safe loader/dumper; do not implement a partial YAML parser.
 - Be careful with import-time dependency resolution: use cases and `ADRFileRepository` currently resolve dependencies as class attributes. Changes to the composition root must be tested for import-order and test-isolation effects.
 - ADR filenames use a four-digit ordinal followed by a lowercase, whitespace-to-hyphen title, for example `0002-use-postgresql.md`.
 - Ordinal discovery currently scans Markdown filenames and ignores files whose first hyphen-delimited component is not numeric. Any change to numbering or supersession should consider the open metadata/listing issues.
@@ -49,7 +52,7 @@ templates: packaged ADR templates
 
 ## Coding and style conventions
 
-- Target Python 3.11; supported range is `>=3.11,<3.15`.
+- Target Python 3.11; supported range is `>=3.11,<3.14`.
 - Use 4 spaces, a maximum line length of 100, and Black formatting.
 - Use type annotations on all functions and methods. Mypy is configured to reject untyped definitions and calls and to warn on unreachable code, missing returns, redundant casts, and unsafe `Any` returns.
 - Prefer `Path` over string paths, frozen dataclasses for DTOs/value objects, explicit return types, and small single-purpose methods.
@@ -80,7 +83,7 @@ uv run --active ruff check src tests
 uv run --active mypy src tests
 ```
 
-The lockfile and `pyproject.toml` require `uv==0.12.5`; use that version before running the commands if the installed `uv` version differs. CI runs the frozen dependency sync, `make lint-ci`, and `make test` on Python 3.11, 3.12, 3.13, and 3.14 across Ubuntu and Windows. Python prereleases such as 3.15 should be tested in a separate explicitly non-stable job before being added to the supported matrix. Pytest treats warnings as errors, so new warnings are test failures.
+The lockfile and `pyproject.toml` require `uv==0.12.5`; use that version before running the commands if the installed `uv` version differs. CI runs the frozen dependency sync, `make lint-ci`, and `make test` on Python 3.11, 3.12, and 3.13 across Ubuntu and Windows. Pytest treats warnings as errors, so new warnings are test failures.
 
 When changing behavior:
 
