@@ -24,8 +24,9 @@ class InitializeAdr:
             id=str(uuid4()),
             ordinal=1,
             title="Record architecture decisions",
-            status="accepted",
+            status=dto.status,
             date=datetime.now().date().isoformat(),
+            tags=dto.tags,
         )
         rendered_template = cls.TEMPLATE_SERVICE.render(
             template_file=app_template,

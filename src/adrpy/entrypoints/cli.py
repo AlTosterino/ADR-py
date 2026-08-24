@@ -5,7 +5,9 @@ import typer
 
 from adrpy.injection import lidi
 from adrpy.shared_kernel.dtos import CreateAdrDto, InitializeAdrDto
+from adrpy.shared_kernel.errors import MetadataValidationError
 from adrpy.shared_kernel.settings import Settings
+from adrpy.shared_kernel.value_objects.adr import AdrCreationMetadata
 from adrpy.use_cases.create import CreateAdr
 from adrpy.use_cases.initialize import InitializeAdr
 
@@ -27,6 +29,14 @@ def init(
         Path | None,
         typer.Option("--config", help="TOML configuration file used to resolve the ADR directory."),
     ] = None,
+    status: Annotated[
+        str,
+        typer.Option("--status", help="Initial ADR status.", show_default=True),
+    ] = "proposed",
+    tags: Annotated[
+        list[str] | None,
+        typer.Option("--tag", help="ADR tag; repeat this option to add multiple tags."),
+    ] = None,
 ) -> None:
     """
     Initialize ADR directory with first ADR in given PATH
@@ -37,7 +47,13 @@ def init(
     elif config:
         new_settings = Settings(config_path=config)
         lidi.bind(Settings, new_settings, singleton=True)
-    dto = InitializeAdrDto(path=path, config_path=config)
+    creation_metadata = _creation_metadata(status, tags)
+    dto = InitializeAdrDto(
+        path=path,
+        config_path=config,
+        status=creation_metadata.status,
+        tags=creation_metadata.tags,
+    )
     InitializeAdr.execute(dto=dto)
 
 
@@ -53,15 +69,36 @@ def new(
         Path | None,
         typer.Option("--config", help="TOML configuration file used to resolve the ADR directory."),
     ] = None,
+    status: Annotated[
+        str,
+        typer.Option("--status", help="Initial ADR status.", show_default=True),
+    ] = "proposed",
+    tags: Annotated[
+        list[str] | None,
+        typer.Option("--tag", help="ADR tag; repeat this option to add multiple tags."),
+    ] = None,
 ) -> None:
     """
     Create new ADR with given NAME
     """
     if config:
         lidi.bind(Settings, Settings(config_path=config), singleton=True)
-    dto = CreateAdrDto(name=name, config_path=config)
+    creation_metadata = _creation_metadata(status, tags)
+    dto = CreateAdrDto(
+        name=name,
+        config_path=config,
+        status=creation_metadata.status,
+        tags=creation_metadata.tags,
+    )
     CreateAdr.execute(dto=dto)
 
 
 def cli_entrypoint() -> None:
     app()
+
+
+def _creation_metadata(status: str, tags: list[str] | None) -> AdrCreationMetadata:
+    try:
+        return AdrCreationMetadata(status=status, tags=tuple(tags or ()))
+    except MetadataValidationError as error:
+        raise typer.BadParameter(str(error)) from error

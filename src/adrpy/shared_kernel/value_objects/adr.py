@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date
 from uuid import UUID
@@ -5,6 +6,32 @@ from uuid import UUID
 from adrpy.shared_kernel.errors import MetadataValidationError
 
 VALID_STATUSES = frozenset({"proposed", "accepted", "rejected", "deprecated", "superseded"})
+
+
+def validate_status(value: str) -> str:
+    if value not in VALID_STATUSES:
+        statuses = ", ".join(sorted(VALID_STATUSES))
+        raise MetadataValidationError(f"Metadata field 'status' must be one of: {statuses}")
+    return value
+
+
+def normalize_tags(values: Iterable[str]) -> tuple[str, ...]:
+    tags = tuple(tag.strip() for tag in values)
+    if any(not tag for tag in tags):
+        raise MetadataValidationError("Metadata field 'tags' must contain non-empty strings")
+    if len(tags) != len(set(tags)):
+        raise MetadataValidationError("Metadata field 'tags' must not contain duplicates")
+    return tags
+
+
+@dataclass(frozen=True)
+class AdrCreationMetadata:
+    status: str = "proposed"
+    tags: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        validate_status(self.status)
+        object.__setattr__(self, "tags", normalize_tags(self.tags))
 
 
 @dataclass(frozen=True)
@@ -31,9 +58,9 @@ class AdrMetadata:
             raise MetadataValidationError("Metadata field 'ordinal' must be a positive integer")
         if not isinstance(self.title, str) or not self.title.strip():
             raise MetadataValidationError("Metadata field 'title' must not be empty")
-        if not isinstance(self.status, str) or self.status not in VALID_STATUSES:
-            statuses = ", ".join(sorted(VALID_STATUSES))
-            raise MetadataValidationError(f"Metadata field 'status' must be one of: {statuses}")
+        if not isinstance(self.status, str):
+            raise MetadataValidationError("Metadata field 'status' must be a string")
+        validate_status(self.status)
         try:
             if not isinstance(self.date, str):
                 raise ValueError
@@ -42,8 +69,9 @@ class AdrMetadata:
             raise MetadataValidationError(
                 "Metadata field 'date' must use ISO format YYYY-MM-DD"
             ) from error
-        if not all(isinstance(tag, str) and tag.strip() for tag in self.tags):
+        if not all(isinstance(tag, str) for tag in self.tags):
             raise MetadataValidationError("Metadata field 'tags' must contain non-empty strings")
+        object.__setattr__(self, "tags", normalize_tags(self.tags))
         self.__validate_references(self.supersedes, "supersedes")
         if self.superseded_by is not None:
             self.__validate_references((self.superseded_by,), "superseded_by")

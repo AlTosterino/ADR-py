@@ -23,8 +23,9 @@ class CreateAdr:
             id=str(uuid4()),
             ordinal=ordinal_number,
             title=dto.name,
-            status="accepted",
+            status=dto.status,
             date=datetime.now().date().isoformat(),
+            tags=dto.tags,
         )
         rendered_template = cls.TEMPLATE_SERVICE.render(
             template_file=template,
