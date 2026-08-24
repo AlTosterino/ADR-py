@@ -122,6 +122,43 @@ All Git commit messages must use a Gitmoji prefix, including commits created by 
 
 ## Release and packaging notes
 
-- The package is built with Hatchling and published with `uv build` / `uv publish`.
-- A version tag matching `v*` triggers the publish job after the matrix test job succeeds.
-- Do not change package layout, entrypoint configuration, or supported Python versions without checking both the wheel build and the GitHub Actions workflow.
+ADR-py is a public open-source project. Treat every release, dependency change, metadata change, and generated-file change as user-facing and potentially irreversible. Do not treat this as a private or disposable project: preserve backwards compatibility, document migration impact, and require evidence before publishing.
+
+### Changelog policy
+
+`CHANGELOG.md` must follow [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/) and Semantic Versioning:
+
+- Keep `## [Unreleased]` at the top.
+- Keep released versions in reverse chronological order with an ISO date: `## [0.5.0] - YYYY-MM-DD`.
+- Group user-facing changes under only the applicable standard headings: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, and `Security`.
+- Write curated notes for users and maintainers; do not paste Git history or commit messages into the changelog.
+- Record breaking changes, deprecations, removals, migration steps, security fixes, and behavior changes explicitly.
+- Move entries from `Unreleased` into the versioned section during release preparation, then add comparison links at the bottom of the file.
+- Keep the changelog consistent with the actual wheel, CLI behavior, documentation, and GitHub release notes.
+
+### Release decision for the P0 metadata/configuration work
+
+PR #24 is intended for a public PyPI release as `0.5.0`, but only after all of these gates pass:
+
+- PR #24 is merged into `main`; never publish or tag from `feature/p0-metadata-foundation` or another feature branch.
+- Configuration and metadata migration documentation is reviewed and describes UUIDs, ordinals, statuses, tags, front matter, config precedence, and compatibility with existing ADR files.
+- `CHANGELOG.md` is converted from `Unreleased` into a dated `[0.5.0]` section using the Keep a Changelog rules above.
+- The supported Python matrix and dependency lockfile are current and green.
+- A wheel is built and installed into a clean environment, not only tested from the checkout.
+- The clean environment smoke test runs `adr --help`, `adr init`, and `adr new`, creates multiple ADRs, verifies front matter and the Markdown body, and exercises configuration resolution.
+- The release commit has passed the same CI checks that the tag-triggered workflow will run.
+
+### Required release workflow
+
+The GitHub Actions workflow in `.github/workflows/ci.yml` is authoritative. A `v*` tag runs the test matrix first; the `publish` job then builds the package, publishes it to PyPI using `PYPI_TOKEN`, and creates the GitHub Release with the built artifacts.
+
+1. Merge the release-ready pull request into `main`.
+2. Create a focused release-preparation branch from the merged `main`, for example `chore/release-0.5.0`.
+3. Update the project version, lockfile if required, `CHANGELOG.md`, and release/migration documentation. Use a Gitmoji commit.
+4. Run `make sync-deps`, `make lint-ci`, `make test`, `uv build`, and the clean-environment wheel/CLI smoke test.
+5. Open and merge the release-preparation PR. Confirm the exact commit to release is on `main` and CI is green.
+6. Create an annotated tag on that exact `main` commit: `git tag -a v0.5.0 -m ':bookmark: release v0.5.0'`.
+7. Push the tag: `git push origin v0.5.0`. Do not use `uv publish` manually when the tag workflow is the configured release path.
+8. Verify the tag workflow, PyPI package, GitHub Release, attached wheel/sdist, and installed-package smoke test. If publication fails, stop and diagnose the workflow; never create a replacement version or overwrite release history casually.
+
+Do not create a release merely because code is merged. Do not publish feature-branch artifacts, dirty working trees, unreviewed changelogs, or packages that have not passed the clean-wheel smoke test. Do not change package layout, entrypoint configuration, version support, or the publish workflow without checking both the wheel build and GitHub Actions behavior.
