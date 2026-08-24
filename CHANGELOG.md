@@ -7,6 +7,8 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-24
+
 ### Added
 
 - `--status` and repeatable `--tag` options for `adr init` and `adr new`.
@@ -24,6 +26,9 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Front matter parsing/rendering uses `python-frontmatter`; ADR-specific validation remains in the typed metadata model.
 - The project toolchain is pinned to `uv==0.12.5` so CI resolves stable Python 3.14.
 
-<!-- Add [0.5.0] here only during release preparation, after all release gates in AGENTS.md pass. -->
+### Fixed
 
-[unreleased]: https://github.com/AlTosterino/ADR-py/compare/v0.4.1...HEAD
+- Invalid status, blank tag, and duplicate tag inputs now return actionable CLI errors instead of creating files or raising tracebacks.
+
+[unreleased]: https://github.com/AlTosterino/ADR-py/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/AlTosterino/ADR-py/compare/v0.4.1...v0.5.0
