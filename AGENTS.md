@@ -80,7 +80,7 @@ uv run --active ruff check src tests
 uv run --active mypy src tests
 ```
 
-The lockfile and `pyproject.toml` require `uv==0.7.8`; use that version before running the commands if the installed `uv` version differs. CI runs the frozen dependency sync, `make lint-ci`, and `make test` on Python 3.11, 3.12, 3.13, and 3.14 across Ubuntu and Windows. Python prereleases such as 3.15 should be tested in a separate explicitly non-stable job before being added to the supported matrix. Pytest treats warnings as errors, so new warnings are test failures.
+The lockfile and `pyproject.toml` require `uv==0.12.5`; use that version before running the commands if the installed `uv` version differs. CI runs the frozen dependency sync, `make lint-ci`, and `make test` on Python 3.11, 3.12, 3.13, and 3.14 across Ubuntu and Windows. Python prereleases such as 3.15 should be tested in a separate explicitly non-stable job before being added to the supported matrix. Pytest treats warnings as errors, so new warnings are test failures.
 
 When changing behavior:
 
