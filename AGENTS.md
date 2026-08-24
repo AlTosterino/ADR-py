@@ -98,6 +98,8 @@ When changing behavior:
 4. For CLI changes, manually check `adr --help`, `adr init`, and `adr new "Example decision"` in a temporary directory and verify generated Markdown/front matter.
 5. Do not commit generated ADR test directories, build artifacts, caches, or local environments.
 
+After every change, run a rigorous end-to-end verification using every currently available CLI command and relevant option. This must include the help paths, successful workflows, invalid inputs, boundary/edge cases, configuration and positional-path precedence, repeated metadata inputs, expected exit codes, generated files, parsed metadata, and preservation of the Markdown body. Run the repository's full lint/test checks as well as the CLI smoke tests; do not consider a change verified from unit tests alone. When packaging or release behavior is affected, also build the wheel, install it into a clean environment, and repeat the CLI smoke test through the installed entry point.
+
 ## GitHub issue context and roadmap
 
 The repository's issue history is part of the design context. Keep these requirements in mind when changing related code:
