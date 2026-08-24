@@ -115,6 +115,8 @@ chore/xyz
 
 Examples: `feature/list-adrs`, `bug/windows-help`, `chore/update-uv`. Branch names should describe one focused change. Start from the current `main`, keep commits focused, and include the relevant issue number in the pull request or commit message when applicable. Before opening a PR, ensure the working tree is clean apart from intended changes and that the same checks required by CI pass locally.
 
+All Git commit messages must use a Gitmoji prefix, including commits created by agents. Use a Gitmoji followed by a concise imperative summary, for example `:sparkles: add ADR listing command`, `:bug: handle missing ADR directory`, or `:memo: update agent guidance`.
+
 ## Release and packaging notes
 
 - The package is built with Hatchling and published with `uv build` / `uv publish`.
