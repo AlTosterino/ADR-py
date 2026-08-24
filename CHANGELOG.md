@@ -12,6 +12,7 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - `--status` and repeatable `--tag` options for `adr init` and `adr new`.
+- Contributor documentation and contribution workflow guidance.
 - Validated YAML front matter for generated ADRs.
 - Immutable UUID identifiers, numeric ordinals, ISO dates, statuses, tag lists, and supersession reference fields.
 - `--config` support for `adr init` and `adr new`.
@@ -24,6 +25,7 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `adr init` and `adr new` emit the same metadata schema.
 - Relative configured ADR directories resolve relative to their configuration file.
 - Front matter parsing/rendering uses `python-frontmatter`; ADR-specific validation remains in the typed metadata model.
+- Updated Mako from `1.3.10` to `1.3.11` in [PR #21](https://github.com/AlTosterino/ADR-py/pull/21), contributed by [Ben Jefferies](https://github.com/benjefferies).
 - The project toolchain is pinned to `uv==0.12.5` so CI resolves stable Python 3.14.
 
 ### Fixed
