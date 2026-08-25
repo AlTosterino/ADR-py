@@ -2,9 +2,11 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+from rich.console import Console
+from rich.table import Table
 
 from adrpy.injection import lidi
-from adrpy.shared_kernel.dtos import CreateAdrDto, InitializeAdrDto
+from adrpy.shared_kernel.dtos import AdrListItem, CreateAdrDto, InitializeAdrDto
 from adrpy.shared_kernel.errors import MetadataValidationError
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.adr import AdrCreationMetadata
@@ -120,21 +122,28 @@ def list_adrs(
         typer.echo("No ADRs found.")
         return
 
-    typer.echo(
-        "ORDINAL  TITLE                                      STATUS       "
-        "TAGS                 SUPERSEDED  FILE"
-    )
-    typer.echo(
-        "-------  ----------------------------------------  -----------  "
-        "-------------------  ----------  ------------------------------"
-    )
+    _display_adr_table(items)
+
+
+def _display_adr_table(items: tuple[AdrListItem, ...]) -> None:
+    table = Table(show_header=True, header_style="bold")
+    table.add_column("Ordinal", justify="right", no_wrap=True)
+    table.add_column("Title")
+    table.add_column("Status", no_wrap=True)
+    table.add_column("Tags")
+    table.add_column("Superseded", no_wrap=True)
+    table.add_column("File")
     for item in items:
         tags = ", ".join(item.tags) or "-"
-        superseded = "yes" if item.is_superseded else "no"
-        typer.echo(
-            f"{item.ordinal:04d}  {item.title[:40]:40}  {item.status:11}  "
-            f"{tags[:19]:19}  {superseded:10}  {item.filename}"
+        table.add_row(
+            f"{item.ordinal:04d}",
+            item.title,
+            item.status,
+            tags,
+            "yes" if item.is_superseded else "no",
+            item.filename,
         )
+    Console().print(table)
 
 
 def cli_entrypoint() -> None:

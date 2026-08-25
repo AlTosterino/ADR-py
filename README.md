@@ -35,7 +35,7 @@ $ adr [OPTIONS] COMMAND [ARGS]...
 
 * `init`: Initialize ADR directory with first ADR in given PATH
 * `new`: Create new ADR with given NAME
-* `list`: List ADRs with status, tags, and superseded state
+* `list`: List ADRs with status, tags, and superseded state in a readable table
 
 ## Configuration and metadata
 
