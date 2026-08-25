@@ -36,6 +36,7 @@ $ adr [OPTIONS] COMMAND [ARGS]...
 * `init`: Initialize ADR directory with first ADR in given PATH
 * `new`: Create new ADR with given NAME
 * `list`: List ADRs with status, tags, and superseded state in a readable table
+* `check`: Validate ADR metadata and supersession relationships
 
 ## Configuration and metadata
 
@@ -124,6 +125,18 @@ resolved from the current working directory:
 ```console
 $ adr list docs/adr
 $ adr list --config .adrpy.toml
+```
+
+## `check`
+
+Validate the ADR collection without modifying files. The command checks front matter, filename
+ordinals, duplicate IDs and ordinals, supersession links, missing targets, contradictory reverse
+links, self-links, and cycles. It exits with code `0` when valid and `1` when diagnostics are
+found.
+
+```console
+$ adr check
+✓ ADR collection is valid (3 files checked).
 ```
 
 

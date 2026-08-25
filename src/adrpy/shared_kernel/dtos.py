@@ -26,6 +26,26 @@ class AdrListItem:
 
 
 @dataclass(frozen=True)
+class AdrCheckDiagnostic:
+    """A file-specific collection validation failure."""
+
+    filename: str
+    message: str
+
+
+@dataclass(frozen=True)
+class AdrCheckReport:
+    """The complete result of validating an ADR collection."""
+
+    checked_files: int
+    diagnostics: tuple[AdrCheckDiagnostic, ...] = ()
+
+    @property
+    def is_valid(self) -> bool:
+        return not self.diagnostics
+
+
+@dataclass(frozen=True)
 class InitializeAdrDto:
     path: Path | None
     config_path: Path | None = None

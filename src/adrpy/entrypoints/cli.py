@@ -6,10 +6,11 @@ from rich.console import Console
 from rich.table import Table
 
 from adrpy.injection import lidi
-from adrpy.shared_kernel.dtos import AdrListItem, CreateAdrDto, InitializeAdrDto
+from adrpy.shared_kernel.dtos import AdrCheckReport, AdrListItem, CreateAdrDto, InitializeAdrDto
 from adrpy.shared_kernel.errors import MetadataValidationError
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.adr import AdrCreationMetadata
+from adrpy.use_cases.check_adrs import CheckAdrs
 from adrpy.use_cases.create import CreateAdr
 from adrpy.use_cases.initialize import InitializeAdr
 from adrpy.use_cases.list_adrs import ListAdrs
@@ -126,6 +127,29 @@ def list_adrs(
     _display_adr_table(items)
 
 
+@app.command(name="check")
+def check_adrs(
+    path: Path = typer.Argument(
+        None,
+        help="Directory containing ADR Markdown files; defaults to configured ADR directory.",
+    ),
+    config: Annotated[
+        Path | None,
+        typer.Option("--config", help="TOML configuration file used to resolve the ADR directory."),
+    ] = None,
+) -> None:
+    """Validate ADR metadata, ordinals, and supersession relationships."""
+    if path:
+        lidi.bind(Settings, Settings(initial_adr_dir=path, config_path=config), singleton=True)
+    elif config:
+        lidi.bind(Settings, Settings(config_path=config), singleton=True)
+
+    report = CheckAdrs.execute()
+    _display_check_report(report)
+    if not report.is_valid:
+        raise typer.Exit(code=1)
+
+
 def _display_adr_table(items: tuple[AdrListItem, ...]) -> None:
     table = Table(show_header=True, header_style="bold")
     table.add_column("Ordinal", justify="right", no_wrap=True)
@@ -144,6 +168,21 @@ def _display_adr_table(items: tuple[AdrListItem, ...]) -> None:
             "yes" if item.is_superseded else "no",
             item.filename,
         )
+    CONSOLE.print(table)
+
+
+def _display_check_report(report: AdrCheckReport) -> None:
+    if report.is_valid:
+        CONSOLE.print(
+            f"[green]✓[/green] ADR collection is valid ({report.checked_files} files checked)."
+        )
+        return
+
+    table = Table(show_header=True, header_style="bold red")
+    table.add_column("File")
+    table.add_column("Problem")
+    for diagnostic in report.diagnostics:
+        table.add_row(diagnostic.filename, diagnostic.message)
     CONSOLE.print(table)
 
 
