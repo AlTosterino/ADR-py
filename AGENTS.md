@@ -105,7 +105,6 @@ After every change, run a rigorous end-to-end verification using every currently
 The repository's issue history is part of the design context. Keep these requirements in mind when changing related code:
 
 - [#18 List ADRs command](https://github.com/AlTosterino/ADR-py/issues/18) — future listing should expose ADRs and supersession state.
-- [#32 ADR graph command](https://github.com/AlTosterino/ADR-py/issues/32) — future graphing should visualize supersession edges, superseded chains, isolated ADRs, and broken relationship diagnostics with deterministic output.
 - [#17 Custom templates](https://github.com/AlTosterino/ADR-py/issues/17) — custom templates should extend the existing template abstraction/configuration rather than hard-code a parallel path.
 - [#16 Default metadata in tags/front matter](https://github.com/AlTosterino/ADR-py/issues/16) — metadata is expected to support stable identity, ordinal, title, status, date, tags, and supersession relationships; decide whether IDs are title-derived or UUID-based before implementing consumers.
 - [#9 Web viewer](https://github.com/AlTosterino/ADR-py/issues/9) — a viewer is intended to be optional and should not burden the core CLI dependency set.
