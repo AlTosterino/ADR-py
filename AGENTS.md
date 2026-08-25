@@ -55,6 +55,7 @@ templates: packaged ADR templates
 - Target Python 3.11; supported range is `>=3.11,<3.15`.
 - Use 4 spaces, a maximum line length of 100, and Black formatting.
 - Use type annotations on all functions and methods. Mypy is configured to reject untyped definitions and calls and to warn on unreachable code, missing returns, redundant casts, and unsafe `Any` returns.
+- Keep all imports at module scope. Do not add imports inside functions, methods, conditionals, or other local scopes; resolve dependency cycles through module structure or an explicit architectural change instead.
 - Prefer `Path` over string paths, frozen dataclasses for DTOs/value objects, explicit return types, and small single-purpose methods.
 - Use named custom types for structured data crossing a public boundary. Do not return opaque nested tuples or unstructured mappings such as `tuple[str, tuple[str, ...]]`; define a named frozen dataclass, value object, or DTO with meaningful fields instead.
 - Specify behavior before implementation: document defaults, accepted inputs, validation rules, errors, side effects, compatibility expectations, and user-visible output. Implement both the successful and failure paths and add tests for each; do not leave behavior implicit in incidental library or template behavior.
@@ -63,6 +64,7 @@ templates: packaged ADR templates
 - Match the existing naming: classes in PascalCase, functions/methods and modules in `snake_case`, constants in `UPPER_SNAKE_CASE`.
 - Organize every source file from global concepts to implementation detail so the most important behavior is visible first. Put the module docstring and imports first, then constants/types, public classes, public module functions/CLI commands, and private helpers at the bottom. Within classes, put the constructor and public methods before private methods. Do not make readers scan past private helpers to discover the application's commands or primary API.
 - For entrypoint modules specifically, keep the Typer app and public commands prominent; place validation adapters and other command helpers after the commands they support. For service/repository modules, expose the interface or main public operation before private parsing, formatting, and filesystem helpers.
+- Use Rich as the single renderer for all CLI-generated user-facing output, including tables, status messages, and empty-result messages. Keep Typer for command parsing, help, and exit-code/error handling; do not mix ad hoc `print`/`typer.echo` output into commands.
 - Use comments/docstrings for intent and non-obvious constraints. Treat existing TODOs as known design debt, not as permission to widen a change unnecessarily.
 - Preserve cross-platform behavior. CI runs on Ubuntu and Windows, so use `pathlib`, avoid OS-specific separators, and test CLI/path changes on both platforms when practical.
 - Do not edit `uv.lock` manually. Change dependency declarations in `pyproject.toml` and regenerate the lockfile with `uv lock`.

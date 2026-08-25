@@ -2,16 +2,20 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+from rich.console import Console
+from rich.table import Table
 
 from adrpy.injection import lidi
-from adrpy.shared_kernel.dtos import CreateAdrDto, InitializeAdrDto
+from adrpy.shared_kernel.dtos import AdrListItem, CreateAdrDto, InitializeAdrDto
 from adrpy.shared_kernel.errors import MetadataValidationError
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.adr import AdrCreationMetadata
 from adrpy.use_cases.create import CreateAdr
 from adrpy.use_cases.initialize import InitializeAdr
+from adrpy.use_cases.list_adrs import ListAdrs
 
 app = typer.Typer()
+CONSOLE = Console()
 
 
 @app.command()
@@ -91,6 +95,56 @@ def new(
         tags=creation_metadata.tags,
     )
     CreateAdr.execute(dto=dto)
+
+
+@app.command(name="list")
+def list_adrs(
+    path: Path = typer.Argument(
+        None,
+        help="Directory containing ADR Markdown files; defaults to configured ADR directory.",
+    ),
+    config: Annotated[
+        Path | None,
+        typer.Option("--config", help="TOML configuration file used to resolve the ADR directory."),
+    ] = None,
+) -> None:
+    """List ADRs with their status, tags, and superseded state."""
+    if path:
+        lidi.bind(Settings, Settings(initial_adr_dir=path, config_path=config), singleton=True)
+    elif config:
+        lidi.bind(Settings, Settings(config_path=config), singleton=True)
+
+    try:
+        items = ListAdrs.execute()
+    except MetadataValidationError as error:
+        raise typer.BadParameter(str(error)) from error
+
+    if not items:
+        CONSOLE.print("No ADRs found.")
+        return
+
+    _display_adr_table(items)
+
+
+def _display_adr_table(items: tuple[AdrListItem, ...]) -> None:
+    table = Table(show_header=True, header_style="bold")
+    table.add_column("Ordinal", justify="right", no_wrap=True)
+    table.add_column("Title")
+    table.add_column("Status", no_wrap=True)
+    table.add_column("Tags")
+    table.add_column("Superseded", no_wrap=True)
+    table.add_column("File")
+    for item in items:
+        tags = ", ".join(item.tags) or "-"
+        table.add_row(
+            f"{item.ordinal:04d}",
+            item.title,
+            item.status,
+            tags,
+            "yes" if item.is_superseded else "no",
+            item.filename,
+        )
+    CONSOLE.print(table)
 
 
 def cli_entrypoint() -> None:

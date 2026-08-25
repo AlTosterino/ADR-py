@@ -35,6 +35,7 @@ $ adr [OPTIONS] COMMAND [ARGS]...
 
 * `init`: Initialize ADR directory with first ADR in given PATH
 * `new`: Create new ADR with given NAME
+* `list`: List ADRs with status, tags, and superseded state in a readable table
 
 ## Configuration and metadata
 
@@ -107,6 +108,23 @@ $ adr new [OPTIONS] NAME
 * `--status`: Initial status; defaults to `proposed`.
 
 * `--tag`: Tag to add; repeat for multiple tags.
+
+## `list`
+
+List all ADRs found in the configured directory. ADRs are ordered by their metadata ordinal.
+The command displays each ADR's title, status, tags, whether it is superseded, and filename.
+
+```console
+$ adr list
+```
+
+Use a positional directory or an explicit configuration file when the ADR directory cannot be
+resolved from the current working directory:
+
+```console
+$ adr list docs/adr
+$ adr list --config .adrpy.toml
+```
 
 
 ## **ADR Template**

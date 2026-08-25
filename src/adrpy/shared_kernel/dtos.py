@@ -6,6 +6,26 @@ from adrpy.shared_kernel.value_objects.adr import normalize_tags, validate_statu
 
 
 @dataclass(frozen=True)
+class AdrDocument:
+    """An ADR file loaded from the configured repository."""
+
+    filename: str
+    content: str
+
+
+@dataclass(frozen=True)
+class AdrListItem:
+    """Validated metadata displayed by the ADR listing command."""
+
+    filename: str
+    ordinal: int
+    title: str
+    status: str
+    tags: tuple[str, ...]
+    is_superseded: bool
+
+
+@dataclass(frozen=True)
 class InitializeAdrDto:
     path: Path | None
     config_path: Path | None = None
