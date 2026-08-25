@@ -12,6 +12,10 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `adr list` to inspect ADR titles, statuses, tags, and superseded state.
 - Rich table output for `adr list`, keeping long values in their own columns without column drift.
 
+### Changed
+
+- Standardized CLI-generated output on Rich rendering.
+
 ## [0.5.0] - 2026-08-24
 
 ### Added

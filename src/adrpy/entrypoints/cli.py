@@ -15,6 +15,7 @@ from adrpy.use_cases.initialize import InitializeAdr
 from adrpy.use_cases.list_adrs import ListAdrs
 
 app = typer.Typer()
+CONSOLE = Console()
 
 
 @app.command()
@@ -119,7 +120,7 @@ def list_adrs(
         raise typer.BadParameter(str(error)) from error
 
     if not items:
-        typer.echo("No ADRs found.")
+        CONSOLE.print("No ADRs found.")
         return
 
     _display_adr_table(items)
@@ -143,7 +144,7 @@ def _display_adr_table(items: tuple[AdrListItem, ...]) -> None:
             "yes" if item.is_superseded else "no",
             item.filename,
         )
-    Console().print(table)
+    CONSOLE.print(table)
 
 
 def cli_entrypoint() -> None:
