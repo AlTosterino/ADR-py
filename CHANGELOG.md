@@ -7,6 +7,10 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- `adr list` to inspect ADR titles, statuses, tags, and superseded state.
+
 ## [0.5.0] - 2026-08-24
 
 ### Added

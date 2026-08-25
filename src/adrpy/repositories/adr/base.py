@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from adrpy.shared_kernel.dtos import AdrDocument
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate, Template
 
 # TODO: Add example how to use adrpy with custom DatabaseRepository
@@ -15,6 +16,9 @@ class IADRRepository(ABC):
 
     @abstractmethod
     def get_next_ordinal_number(self) -> int: ...
+
+    @abstractmethod
+    def list_documents(self) -> tuple[AdrDocument, ...]: ...
 
 
 # ? Possibility of custom templates?

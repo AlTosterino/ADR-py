@@ -1,7 +1,8 @@
 from typing import Final
 
-from adrpy.injection import lidi
+from adrpy.injection.container import lidi
 from adrpy.repositories.adr.base import IADRRepository
+from adrpy.shared_kernel.dtos import AdrDocument
 from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.template import RenderedTemplate, Template
 
@@ -33,6 +34,14 @@ class ADRFileRepository(IADRRepository):
             prefix_as_int = int(parts[0])
             ordinal_number = max(ordinal_number, prefix_as_int)
         return ordinal_number + 1
+
+    def list_documents(self) -> tuple[AdrDocument, ...]:
+        if not self.SETTINGS.adr_dir.is_dir():
+            return ()
+        return tuple(
+            AdrDocument(filename=path.name, content=path.read_text())
+            for path in sorted(self.SETTINGS.adr_dir.glob("*.md"))
+        )
 
     @staticmethod
     def __get_filename_with_extension(name: str) -> str:

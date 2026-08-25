@@ -62,3 +62,22 @@ def test_should_get_next_ordinal_number(adr_repository: IADRRepository) -> None:
 
     # Then
     assert ordinal_number == expected_next_ordinal_number
+
+
+def test_should_list_markdown_documents_in_filename_order(adr_repository: IADRRepository) -> None:
+    adr_repository.create(
+        adr_name="0002-second",
+        template=RenderedTemplate(name="0002-second", content="second"),
+    )
+    adr_repository.create(
+        adr_name="0001-first",
+        template=RenderedTemplate(name="0001-first", content="first"),
+    )
+    (TEST_DIRECTORY / "notes.txt").write_text("not an ADR")
+
+    documents = adr_repository.list_documents()
+
+    assert [(document.filename, document.content) for document in documents] == [
+        ("0001-first.md", "first"),
+        ("0002-second.md", "second"),
+    ]

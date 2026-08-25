@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Final
 from uuid import uuid4
 
-from adrpy.injection import lidi
+from adrpy.injection.container import lidi
 from adrpy.repositories.adr.base import IADRRepository
 from adrpy.services.metadata.base import IMetadataService
 from adrpy.services.template.base import ITemplateService

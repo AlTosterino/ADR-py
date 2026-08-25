@@ -10,6 +10,7 @@ from adrpy.shared_kernel.settings import Settings
 from adrpy.shared_kernel.value_objects.adr import AdrCreationMetadata
 from adrpy.use_cases.create import CreateAdr
 from adrpy.use_cases.initialize import InitializeAdr
+from adrpy.use_cases.list_adrs import ListAdrs
 
 app = typer.Typer()
 
@@ -91,6 +92,49 @@ def new(
         tags=creation_metadata.tags,
     )
     CreateAdr.execute(dto=dto)
+
+
+@app.command(name="list")
+def list_adrs(
+    path: Path = typer.Argument(
+        None,
+        help="Directory containing ADR Markdown files; defaults to configured ADR directory.",
+    ),
+    config: Annotated[
+        Path | None,
+        typer.Option("--config", help="TOML configuration file used to resolve the ADR directory."),
+    ] = None,
+) -> None:
+    """List ADRs with their status, tags, and superseded state."""
+    if path:
+        lidi.bind(Settings, Settings(initial_adr_dir=path, config_path=config), singleton=True)
+    elif config:
+        lidi.bind(Settings, Settings(config_path=config), singleton=True)
+
+    try:
+        items = ListAdrs.execute()
+    except MetadataValidationError as error:
+        raise typer.BadParameter(str(error)) from error
+
+    if not items:
+        typer.echo("No ADRs found.")
+        return
+
+    typer.echo(
+        "ORDINAL  TITLE                                      STATUS       "
+        "TAGS                 SUPERSEDED  FILE"
+    )
+    typer.echo(
+        "-------  ----------------------------------------  -----------  "
+        "-------------------  ----------  ------------------------------"
+    )
+    for item in items:
+        tags = ", ".join(item.tags) or "-"
+        superseded = "yes" if item.is_superseded else "no"
+        typer.echo(
+            f"{item.ordinal:04d}  {item.title[:40]:40}  {item.status:11}  "
+            f"{tags[:19]:19}  {superseded:10}  {item.filename}"
+        )
 
 
 def cli_entrypoint() -> None:

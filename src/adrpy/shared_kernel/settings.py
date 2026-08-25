@@ -1,3 +1,4 @@
+import tomllib
 from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
@@ -26,8 +27,6 @@ class Settings:
         return Path.cwd()
 
     def __get_adr_dir_from_config(self) -> Path | None:
-        import tomllib
-
         config_path = self.__get_config_path()
         if config_path is None:
             return None
